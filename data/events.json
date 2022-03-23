@@ -1,1 +1,1 @@
-[null,{"name":"Bot error","temp":"Error","event-type":"37","_id":"KReKs","actions":[{"status":"2","name":"Set Bot Status"},{"channel":"7","varName":"logi globalne","message":"Bot error","storage":"0","varName2":"","name":"Send Message"}],"temp2":"Error"}]
+[null,{"name":"Wiadomość powitalna","temp":"Members","event-type":"6","_id":"xSDaG","actions":[]}]
