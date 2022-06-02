@@ -4,16 +4,32 @@ from discord.ext import commands
 from discord.ext.commands import has_permissions
 import random
 
+#zmienne
+intents = discord.Intents.default()
+intents.members = True
+intents.messages = True
+
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
-client = commands.Bot(command_prefix= "a!")
+client = commands.Bot(command_prefix= "a!", intents=intents)
 client.remove_command("help")
 
-#żeczy wyświetlające się w konsoli lub żeczy aktywujące się przy starcie bota
+#eventy (aktywujące makra)
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="a!pomoc"))
     print("Status bota ustawiony na słucha a!pomoc")
     print("Bot gotowy do użytku (Działa)")
+    
+@client.event
+async def on_member_join(member):
+    kanal = discord.utils.get(member.guild.channels, name="czat")
+    await kanal.send(f"{member.mention} wszedł na serwer!!!")
+
+@client.event
+async def on_member_remove(member):
+    kanal = discord.utils.get(member.guild.channels, name="czat")
+    await kanal.send(f"{member.name} wyszedł z serwera!!!")
+
 
 #komendy administracyjne
 @client.command()
@@ -35,8 +51,6 @@ async def kick(ctx, member : discord.Member, reason="Administrator nie podał po
     await ctx.send(embed=embed)
 
 
-
-
 #komendy podstawowe
 @client.command()
 async def pomoc(ctx):
@@ -49,7 +63,7 @@ async def pomoc(ctx):
 #komendy for fun
 @client.command()
 async def iq(ctx):
-    number = random.randrange(25, 150)
+    number = random.randrange(1, 200)
     embed=discord.Embed(color=0x0011ff)
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
     await ctx.send(embed=embed)
