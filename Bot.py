@@ -50,6 +50,24 @@ async def kick(ctx, member : discord.Member, reason="Administrator nie podał po
     embed.add_field(name="Za:", value=reason, inline=False)
     await ctx.send(embed=embed)
 
+@client.command()
+@commands.has_permissions(mute_members=True)
+async def mute(ctx,member: discord.Member, *, reason="Administrator nie podał powodu"):
+    guild = ctx.guild
+    mutedRole = discord.utils.get(guild.roles, name="Zmutowany")
+    if not mutedRole:
+        mutedRole = await guild.create.role(name="Zmutowany")
+        for channel in guild.channels:
+            await channel.set_permission(mutedRole, speak=False, send_messages=False, read_message_history=False, read_messages=False)
+
+    await member.add_roles(mutedRole, reason=reason)
+    await ctx.send(f"Zmutowano {memeber.metion} za `{reason}`")
+    await member.send(f"Zostałeś zmutowany na serwerze `{guild.name} za `{reason}`")
+    
+@client.command()
+async def setweryfikacja(ctx):
+    msg = await ctx.send("Aby się zweryfikować naciśnij emotkę poniżej")
+    await msg.add_reaction('✅')
 
 #komendy podstawowe
 @client.command()
