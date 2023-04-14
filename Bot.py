@@ -13,7 +13,6 @@ intents.messages = True
 
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
 client = discord.Bot(intents=intents)
-client.remove_command("help")
 
 #eventy (aktywujące makra)
 @client.event
