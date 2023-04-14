@@ -14,10 +14,6 @@ intents = discord.Intents.all()
 intents.members = True
 intents.messages = True
 
-
-async def update_bot_description(description):
-    await client.user.edit_profile(description=description)
-
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
 client = discord.Bot(intents=intents)
 
@@ -26,7 +22,6 @@ client = discord.Bot(intents=intents)
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="a!pomoc"))
     print("Status bota ustawiony na słucha a!pomoc")
-    await update_bot_description(f"Test./n Bot version: {bot_version}")
     print("Bot gotowy do użytku")
     
 @client.event
