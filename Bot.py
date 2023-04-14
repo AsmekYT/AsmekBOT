@@ -89,7 +89,7 @@ async def iq(ctx):
     await ctx.send(embed=embed)
 
 @client.command()
-async def ball(ctx):
+async def ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.send(random.choice(spis))
 
