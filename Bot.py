@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "**3.0.0 [ALFA]**"
+bot_version = "**3.1.0 [ALFA]**"
 
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
@@ -46,7 +46,7 @@ async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie poda�
     embed.add_field(name="Za:", value=powód, inline=False)
     await ctx.send(embed=embed)
     
-@client.slash_command()
+@client.slash_command(name = "kick", description = "Komenda do wurzucenia gracza z serwera.")
 @has_permissions(kick_members=True)
 async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
     await użytkownik.kick(reason=powód)
@@ -59,21 +59,21 @@ async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie poda
 #async def mute(ctx, member: discord.Member):
     #await member.edit(mute=True)
     
-@client.slash_command()
+@client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
 async def setweryfikacja(ctx):
     msg = await ctx.send("Aby się zweryfikować naciśnij emotkę poniżej")
     await msg.add_reaction('✅')
     await ctx.respond("Stworzono weryfikację!") 
 
 #komendy podstawowe
-@client.slash_command()
+@client.slash_command(name = "pomoc", description = "Pomoc odnośnie używania bota")
 async def pomoc(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
     await ctx.send(embed=embed)
 
-@client.slash_command()
+@client.slash_command(name = "help", description = "List of all bot commands")
 async def help(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
@@ -86,15 +86,15 @@ async def ping(ctx):
     await ctx.respond("Pong!")
 
 #komendy for fun
-@client.slash_command()
+@client.slash_command(name = "iq", description = "Losuje znaczy pokazuje twoje iq w skali od 50 do 200")
 async def iq(ctx):
     number = random.randrange(1, 200)
     embed=discord.Embed(color=0x0011ff)
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
     await ctx.respond(embed=embed)
 
-@client.command()
-async def ball(ctx, wiadomość):
+@client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
+async def 8ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.respond(random.choice(spis))
 
