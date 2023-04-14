@@ -94,7 +94,7 @@ async def ball(ctx):
     await ctx.channel.send(random.choice(spis))
 
 #Komendy z ukośnikiem (/)
-@client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy z slashem (/).", guild=discord.Object(id=12417128931))
+@client.slash_command(name = "ping_3.0", description = "Sprawdza czy bot reaguje na komendy z slashem (/).", guild=discord.Object(id=12417128931))
 async def ping_slash(ctx):
     await ctx.respond("Pong!")
 
