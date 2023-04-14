@@ -97,9 +97,9 @@ async def ball(ctx):
     await ctx.channel.send(random.choice(spis))
 
 #Komendy z ukośnikiem (/)
-@tree.command(name = "commandname", description = "My first application Command", guild=discord.Object(id=12417128931)) #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
-async def first_command(interaction):
-    await interaction.response.send_message("Hello!")
+@client.slash_command(name = "Ping", description = "Sprawdza czy bot reaguje na komendy z slashem (/).", guild=discord.Object(id=12417128931))
+async def ping_slash():
+    await ctx.respond("Pong!")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
