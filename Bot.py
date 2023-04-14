@@ -36,7 +36,7 @@ async def on_member_remove(member):
 @client.slash_command(name = "ban", description = "Komenda służąca do permanentnego zbanowania urzytkownika")
 @has_permissions(ban_members=True)
 async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
-    await użytkownik.ban(powód=reason)
+    await użytkownik.ban(reason=powód)
     embed=discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
     embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
     embed.add_field(name="Za:", value=powód, inline=False)
