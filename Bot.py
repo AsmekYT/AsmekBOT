@@ -22,6 +22,7 @@ client = discord.Bot(intents=intents)
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="a!pomoc"))
     print("Status bota ustawiony na słucha a!pomoc")
+    await client.user.edit(description=f"Witaj! Jestem botem Discord./nVersion: {bot_version}")
     print("Bot gotowy do użytku")
     
 @client.event
