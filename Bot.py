@@ -69,6 +69,17 @@ async def pomoc(ctx):
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
     await ctx.send(embed=embed)
 
+@client.command()
+async def helpctx):
+    embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
+    embed.set_author(name="Asmek (autor)")
+    embed.add_field(name="Menu", value="(NIebawem)", inline=True)
+    await ctx.send(embed=embed)
+
+@client.command()
+async def ping(ctx):
+    print("Działam(komenda ping)")
+    await ctx.send("Pong!")
 
 #komendy for fun
 @client.command()
