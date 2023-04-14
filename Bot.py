@@ -1,7 +1,6 @@
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
 from discord.ext import commands
-from discord.ext import slash_commands
 from discord.ext.commands import has_permissions
 import random
 import datetime
