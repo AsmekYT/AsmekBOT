@@ -1,6 +1,7 @@
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
 from discord.ext import commands
+from discord import app_commands 
 from discord.ext.commands import has_permissions
 import random
 import datetime
@@ -15,10 +16,18 @@ intents.messages = True
 client = commands.Bot(command_prefix= "a!", intents=intents)
 client.remove_command("help")
 
+class aclient(discord.Client):
+    def __init__(self):
+        super().__init__(intents = discord.Intents.all())
+        self.synced = False 
+
 #eventy (aktywujące makra)
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="a!pomoc"))
+    if not self.synced: #check if slash commands have been synced 
+        await tree.sync(guild = discord.Object(id=953390101893890179)) 
+        self.synced = True
     print("Status bota ustawiony na słucha a!pomoc")
     print("Bot gotowy do użytku")
     
@@ -76,6 +85,10 @@ async def help(ctx):
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
     await ctx.send(embed=embed)
 
+@tree.command(guild = discord.Object(id=guild_id), name = 'Ping', description='Sprawdzenie czy bot reaguje') #guild specific slash command
+async def slash2(interaction: discord.Interaction):
+    await interaction.response.send_message(f"Pong!", ephemeral = True) 
+
 @client.command()
 async def ping(ctx):
     print("Działam(komenda ping)")
@@ -93,6 +106,9 @@ async def iq(ctx):
 async def ball(ctx):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.send(random.choice(spis))
+
+client = aclient()
+tree = app_commands.CommandTree(client)
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
