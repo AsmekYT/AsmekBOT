@@ -42,33 +42,34 @@ async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie poda�
     embed.add_field(name="Za:", value=powód, inline=False)
     await ctx.send(embed=embed)
     
-@client.command()
+@client.slash_command()
 @has_permissions(kick_members=True)
-async def kick(ctx, member : discord.Member, reason="Administrator nie podał powodu"):
-    await member.kick(reason=reason)
+async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
+    await użytkownik.kick(reason=powód)
     embed=discord.Embed(title="Kick", description="Użyto komendy kick", color=0x0011ff)
-    embed.add_field(name="Zkickowano:", value=member, inline=True)
-    embed.add_field(name="Za:", value=reason, inline=False)
-    await ctx.send(embed=embed)
+    embed.add_field(name="Zkickowano:", value=użytkownik, inline=True)
+    embed.add_field(name="Za:", value=powód, inline=False)
+    await ctx.respond(embed=embed)
 
-@commands.command()
-async def mute(ctx, member: discord.Member):
-    await member.edit(mute=True)
+#@commands.command()
+#async def mute(ctx, member: discord.Member):
+    #await member.edit(mute=True)
     
-@client.command()
+@client.slash_command()
 async def setweryfikacja(ctx):
     msg = await ctx.send("Aby się zweryfikować naciśnij emotkę poniżej")
     await msg.add_reaction('✅')
+    await ctx.respond("Stworzono weryfikację!") 
 
 #komendy podstawowe
-@client.command()
+@client.slash_command()
 async def pomoc(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
     await ctx.send(embed=embed)
 
-@client.command()
+@client.slash_command()
 async def help(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
@@ -81,17 +82,17 @@ async def ping(ctx):
     await ctx.respond("Pong!")
 
 #komendy for fun
-@client.command()
+@client.slash_command()
 async def iq(ctx):
     number = random.randrange(1, 200)
     embed=discord.Embed(color=0x0011ff)
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
-    await ctx.send(embed=embed)
+    await ctx.respond(embed=embed)
 
 @client.command()
 async def ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
-    await ctx.channel.send(random.choice(spis))
+    await ctx.channel.respond(random.choice(spis))
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
