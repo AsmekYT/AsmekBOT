@@ -21,9 +21,6 @@ client.remove_command("help")
 @client.event
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="a!pomoc"))
-    if not self.synced: #check if slash commands have been synced 
-        await tree.sync(guild = discord.Object(id=953390101893890179)) 
-        self.synced = True
     print("Status bota ustawiony na słucha a!pomoc")
     print("Bot gotowy do użytku")
     
