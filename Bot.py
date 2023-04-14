@@ -14,7 +14,6 @@ intents.messages = True
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
 client = commands.Bot(command_prefix= "a!", intents=intents)
 client.remove_command("help")
-tree = app_commands.CommandTree(client)
 
 #eventy (aktywujące makra)
 @client.event
