@@ -93,11 +93,6 @@ async def ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.send(random.choice(spis))
 
-#Komendy z ukośnikiem (/)
-@client.slash_command(name = "pingtest", description = "Sprawdza czy bot reaguje na komendy z slashem (/).", guild=discord.Object(id=12417128931))
-async def pingtest(ctx):
-    await ctx.respond("Pong!")
-
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
 
