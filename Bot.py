@@ -1,6 +1,6 @@
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
-from discord import app_commands
+#from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 import random
@@ -15,7 +15,7 @@ intents.messages = True
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
 client = commands.Bot(command_prefix= "a!", intents=intents)
 client.remove_command("help")
-tree = app_commands.CommandTree(client)
+#tree = app_commands.CommandTree(client)
 
 #eventy (aktywujące makra)
 @client.event
@@ -100,9 +100,9 @@ async def ball(ctx):
     await ctx.channel.send(random.choice(spis))
 
 #Komendy z ukośnikiem (/)
-@tree.command(name = "commandname", description = "My first application Command", guild=discord.Object(id=12417128931)) #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
-async def first_command(interaction):
-    await interaction.response.send_message("Hello!")
+#@tree.command(name = "commandname", description = "My first application Command", guild=discord.Object(id=12417128931)) #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
+#async def first_command(interaction):
+    #await interaction.response.send_message("Hello!")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
