@@ -78,7 +78,7 @@ async def help(ctx):
 @client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy", guild=discord.Object(id=12417128931))
 async def ping(ctx):
     print("Działam(komenda ping)")
-    await ctx.send("Pong!")
+    await ctx.respond("Pong!")
 
 #komendy for fun
 @client.command()
