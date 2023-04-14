@@ -94,8 +94,8 @@ async def ball(ctx):
     await ctx.channel.send(random.choice(spis))
 
 #Komendy z ukośnikiem (/)
-@client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy z slashem (/).", ctx)
-async def ping_slash():
+@client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy z slashem (/).")
+async def ping_slash(ctx):
     await ctx.respond("Pong!")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
