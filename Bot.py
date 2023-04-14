@@ -70,7 +70,7 @@ async def pomoc(ctx):
     await ctx.send(embed=embed)
 
 @client.command()
-async def helpctx):
+async def help(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
