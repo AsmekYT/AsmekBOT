@@ -16,7 +16,7 @@ intents.messages = True
 
 
 async def update_bot_description(description):
-    await client.user.edit(my_description=description)
+    await client.user.edit_profile(description=description)
 
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
 client = discord.Bot(intents=intents)
