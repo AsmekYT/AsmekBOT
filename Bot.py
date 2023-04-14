@@ -10,6 +10,7 @@ import time
 intents = discord.Intents.all()
 intents.members = True
 intents.messages = True
+bot = commands.Bot()
 
 #ustalenie podstaw bota (prefixu) oraz usunięcie domyślnej komendy
 client = commands.Bot(command_prefix= "a!", intents=intents)
@@ -102,8 +103,12 @@ async def ball(ctx):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.send(random.choice(spis))
 
+#Komendy z ukośnikiem (/)
+@bot.slash_command(name="Ping", description="Sprawdza czy bot odpowiada", guild_ids=[953390101893890179]) #Add the guild ids in which the slash command will appear. If it should be in all, remove the argument, but note that it will take some time (up to an hour) to register the command if it's for all guilds.
+async def first_slash(ctx): 
+    await ctx.respond("Pong!")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
-client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
+bot.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
 
 time.sleep(10)
