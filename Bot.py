@@ -75,7 +75,7 @@ async def help(ctx):
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
     await ctx.send(embed=embed)
 
-@client.command()
+@client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy", guild=discord.Object(id=12417128931))
 async def ping(ctx):
     print("Działam(komenda ping)")
     await ctx.send("Pong!")
