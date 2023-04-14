@@ -1,5 +1,5 @@
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
-import discord
+import py-cord
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 import random
