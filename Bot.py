@@ -3,9 +3,11 @@ import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 import random
+import datetime
+import time
 
 #zmienne
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 intents.messages = True
 
@@ -18,7 +20,7 @@ client.remove_command("help")
 async def on_ready():
     await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="a!pomoc"))
     print("Status bota ustawiony na słucha a!pomoc")
-    print("Bot gotowy do użytku (Działa)")
+    print("Bot gotowy do użytku")
     
 @client.event
 async def on_member_join(member):
@@ -50,19 +52,9 @@ async def kick(ctx, member : discord.Member, reason="Administrator nie podał po
     embed.add_field(name="Za:", value=reason, inline=False)
     await ctx.send(embed=embed)
 
-@client.command()
-@commands.has_permissions(mute_members=True)
-async def mute(ctx,member: discord.Member, *, reason="Administrator nie podał powodu"):
-    guild = ctx.guild
-    mutedRole = discord.utils.get(guild.roles, name="Zmutowany")
-    if not mutedRole:
-        mutedRole = await guild.create.role(name="Zmutowany")
-        for channel in guild.channels:
-            await channel.set_permission(mutedRole, speak=False, send_messages=False, read_message_history=False, read_messages=False)
-
-    await member.add_roles(mutedRole, reason=reason)
-    await ctx.send(f"Zmutowano {memeber.metion} za `{reason}`")
-    await member.send(f"Zostałeś zmutowany na serwerze `{guild.name} za `{reason}`")
+@commands.command()
+async def mute(ctx, member: discord.Member):
+    await member.edit(mute=True)
     
 @client.command()
 async def setweryfikacja(ctx):
@@ -91,5 +83,7 @@ async def ball(ctx):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.send(random.choice(spis))
 
-#token bota
-client.run("OTUzMzkwMTAxODkzODkwMTc5.GnwHzI.9AoFbin4furyoj6NjiH6ok1Rhk_ghwEC5xjknI")
+#token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
+client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
+
+time.sleep(10)
