@@ -33,7 +33,7 @@ async def on_member_remove(member):
 
 
 #komendy administracyjne
-@client.slash_command(name = "ban", description = "Komenda służąca do permanentnego zbanowania urzytkownika")
+@client.slash_command(name = "ban", description = "Komenda służąca do permanentnego zbanowania urzytkownika", guild=discord.Object(id=12417128931))
 @has_permissions(ban_members=True)
 async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
     await użytkownik.ban(reason=powód)
