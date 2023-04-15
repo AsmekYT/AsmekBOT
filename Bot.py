@@ -20,7 +20,7 @@ client = discord.Bot(intents=intents)
 #eventy (aktywujące makra)
 @client.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="/pomoc or for English /help"))
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="`/pomoc` or for English `/help`"))
     print("Status bota ustawiony na słucha /pomoc or for English /help")
     #await client.user.edit(description=f"Witaj! Jestem botem Discord./nVersion: {bot_version}")
     print("Bot gotowy do użytku")
