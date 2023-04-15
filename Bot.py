@@ -44,7 +44,8 @@ async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie poda�
     embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
     embed.add_field(name="Za:", value=powód, inline=False)
     await ctx.respond(embed=embed)
-    await użytkownik.create_dm(await ctx.send(embed=embed))
+    await użytkownik.create_dm()
+    await użytkownik.dm_channel.send(embed=embed)
     await użytkownik.ban(reason=powód)
     
 @client.slash_command(name = "kick", description = "Komenda do wurzucenia gracza z serwera.")
