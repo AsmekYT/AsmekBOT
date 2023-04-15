@@ -70,7 +70,7 @@ async def clear(ctx, liczba_wiadomości: int):
     await ctx.channel.purge(limit=liczba_wiadomości)
     embed = discord.Embed(title="Czyszczenie wiadomości", color=0x00e1ff)
     embed.add_field(name="Wyczyszczono następującą liczbę wiadomości: ", value=liczba_wiadomości, inline=False)
-    await ctx.respond(embed, delete_after=5)
+    await ctx.respond(embed=embed, delete_after=5)
     
 @client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
 async def setweryfikacja(ctx):
