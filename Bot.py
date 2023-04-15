@@ -94,7 +94,7 @@ async def iq(ctx):
     await ctx.respond(embed=embed)
 
 @client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
-async def 8ball(ctx, wiadomość):
+async def ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     await ctx.channel.respond(random.choice(spis))
 
