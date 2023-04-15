@@ -117,7 +117,7 @@ async def ball(ctx, wiadomość):
     await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```")
 
 #komendy muzyczne
-@client.command()
+@client.slash_command(name = "play", description = "Umożliwia puszczanie muzyki poprzez linki z youtube")
 async def play(ctx, url : str):
     song_there = os.path.isfile("song.mp3")
     try:
