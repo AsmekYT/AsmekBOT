@@ -68,7 +68,9 @@ async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie poda
 @has_permissions(manage_messages=True)
 async def clear(ctx, liczba_wiadomości: int):
     await ctx.channel.purge(limit=liczba_wiadomości)
-    await ctx.respond(f'Usunięto {liczba_wiadomości} wiadomości!', delete_after=5)
+    embed = discord.Embed(title="Czyszczenie wiadomości", color=0x00e1ff)
+    embed.add_field(name="Wyczyszczono następującą liczbę wiadomości: ", value=liczba_wiadomości, inline=False)
+    await ctx.respond(embed, delete_after=5)
     
 @client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
 async def setweryfikacja(ctx):
