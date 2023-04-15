@@ -96,7 +96,7 @@ async def iq(ctx):
 @client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
 async def ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
-    await ctx.channel.interaction.respond(random.choice(spis))
+    await ctx.respond(f'Zapytał się ```{wiadomość}``` na co bot odpowiada: /n' + random.choice(spis))
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
