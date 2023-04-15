@@ -71,7 +71,7 @@ async def pomoc(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
-    await ctx.send(embed=embed)
+    await ctx.respond(embed=embed)
 
 @client.slash_command(name = "help", description = "List of all bot commands")
 async def help(ctx):
