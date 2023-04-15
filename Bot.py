@@ -40,13 +40,16 @@ async def on_member_remove(member):
 @client.slash_command(name = "ban", description = "Komenda służąca do permanentnego zbanowania urzytkownika", guild=discord.Object(id=12417128931))
 @has_permissions(ban_members=True)
 async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
+    embed=discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
+    embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
+    embed.add_field(name="Za:", value=powód, inline=False)
+    await użytkownik.create_dm()
+    await użytkownik.dm_channel.send(await ctx.send(embed=embed))
     await użytkownik.ban(reason=powód)
     embed=discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
     embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
     embed.add_field(name="Za:", value=powód, inline=False)
     await ctx.respond(embed=embed)
-    await użytkownik.create_dm()
-    await użytkownik.dm_channel.send(await ctx.send(embed=embed))
     
 @client.slash_command(name = "kick", description = "Komenda do wurzucenia gracza z serwera.")
 @has_permissions(kick_members=True)
