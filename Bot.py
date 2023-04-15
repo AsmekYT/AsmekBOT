@@ -65,7 +65,7 @@ async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie poda
     #await member.edit(mute=True)
 
 @client.slash_command(name = "clear", description = "Komenda umożliwiająca czyszczenie czatu")
-@has_permissions(delete_messages=True)
+@has_permissions(manage_messages=True)
 async def clear(ctx, amount: int):
     await ctx.channel.purge(limit=amount)
     await ctx.send(f'Usunięto {amount} wiadomości!', delete_after=5)
