@@ -44,7 +44,7 @@ async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie poda�
     embed=discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
     embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
     embed.add_field(name="Za:", value=powód, inline=False)
-    await ctx.send(embed=embed)
+    await ctx.respond(embed=embed)
     
 @client.slash_command(name = "kick", description = "Komenda do wurzucenia gracza z serwera.")
 @has_permissions(kick_members=True)
@@ -78,7 +78,7 @@ async def help(ctx):
     embed=discord.Embed(title="Pomoc", description="Komendy bota", color=0x0011ff)
     embed.set_author(name="Asmek (autor)")
     embed.add_field(name="Menu", value="(NIebawem)", inline=True)
-    await ctx.send(embed=embed)
+    await ctx.respond(embed=embed)
 
 @client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy", guild=discord.Object(id=12417128931))
 async def ping(ctx):
@@ -96,6 +96,9 @@ async def iq(ctx):
 @client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
 async def ball(ctx, wiadomość):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
+    #lista_zakazana = [valorant, valo, vl]
+    #if lista_zakazana in wiadomość:
+        #mute()
     await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
