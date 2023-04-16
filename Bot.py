@@ -56,6 +56,11 @@ async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie poda�
 @client.slash_command(name = "kick", description = "Komenda do wurzucenia gracza z serwera.")
 @has_permissions(kick_members=True)
 async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
+    embed2=discord.Embed(title="Wyrzucono cię", description="Zostałeś wyrzucony przez admina", color=0x0011ff)
+    embed2.add_field(name="Zkickowano:", value=użytkownik, inline=True)
+    embed2.add_field(name="Za:", value=powód, inline=False)
+    await użytkownik.create_dm()
+    await użytkownik.dm_channel.send(embed=embed2)
     await użytkownik.kick(reason=powód)
     embed=discord.Embed(title="Kick", description="Użyto komendy kick", color=0x0011ff)
     embed.add_field(name="Zkickowano:", value=użytkownik, inline=True)
