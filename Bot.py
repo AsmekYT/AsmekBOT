@@ -185,6 +185,7 @@ async def bal(ctx):
     with open('economy_data.json', 'r') as f:
         data = json.load(f)
     user_id = str(ctx.author.id)
+    money = data[user_id]['money']
     if user_id in data:
         embed = discord.Embed(title="Balance", description="Twoja liczba pieniędzy zarówno w banku jak i gotówki",
                               color=0x00bd03)
