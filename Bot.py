@@ -190,7 +190,7 @@ async def bal(ctx):
                               color=0x00bd03)
         embed.set_author(name="Bank")
         money = data[user_id]['money']
-        embed.add_field(name="Gotówka", value="money", inline=False)
+        embed.add_field(name="Gotówka", value=money, inline=False)
         embed.add_field(name="Pieniądze w banku", value="undefined", inline=False)
         embed.set_footer(text="Pozdrawiamy ASMbank")
         await ctx.respond(embed=embed)
