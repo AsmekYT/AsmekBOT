@@ -181,7 +181,7 @@ async def play(ctx, url : str):
     voice.play(discord.FFmpegPCMAudio("song.mp3"))
 
 #ekonomia
-@client.slash_command()
+@client.slash_command(name = "bal", description = "Sprawdza konto w banku")
 async def bal(ctx):
     if not ctx.author.id == ctx.guild.owner_id:
         await ctx.author.send("Nie masz uprawnień do wykonania tej komendy.")
