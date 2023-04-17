@@ -135,21 +135,13 @@ async def ball(ctx, wiadomość):
     with open("8ball_data.json", "r") as f:
         data = json.load(f)
 
-    # Sprawdzenie, czy użytkownik ma już wygenerowane IQ
-    if str(ctx.author.id) in data:
-        number = data[str(ctx.author.id)]
-    else:
-        number = random.randrange(50, 201)
-        data[str(ctx.author.id)] = number
-
         # Zapisanie danych do pliku
-        with open("iq_data.json", "w") as f:
+        with open("8ball_data.json", "w") as f:
             json.dump(data, f)
 
     # Wyświetlenie wyniku
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
-    await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```\n" +
-                       "Twoje IQ wynosi: " + str(number))
+    await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```"
 
 #komendy muzyczne
 @client.slash_command(name = "play", description = "Umożliwia puszczanie muzyki poprzez linki z youtube")
