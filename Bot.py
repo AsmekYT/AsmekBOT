@@ -183,7 +183,7 @@ async def play(ctx, url : str):
 #ekonomia
 @client.slash_command()
 async def bal(ctx):
-    if not ctx.author.guild_permissions.is_owner():
+    if not ctx.author.id == ctx.guild.owner_id:
         await ctx.author.send("Nie masz uprawnień do wykonania tej komendy.")
         return
     else:
@@ -194,8 +194,11 @@ async def bal(ctx):
             embed = discord.Embed(title="Balance", description="Twoja liczba pieniędzy zarówno w banku jak i gotówki", color=0x00bd03)
             embed.set_author(name="Bank")
             money = data[user_id]['money']
-            embed.add_field(name="Gotówka", value=money, inline=False)
-            embed.add_field(name="Pieniądze w banku", value="undefined", inline=False)
+            embed.add_field(name="Gotówka:", value=money, inline=False)
+            money = data[user_id]['bank']
+            embed.add_field(name="Pieniądze w banku:", value=bank, inline=False)
+            money = data[user_id]['loan']
+            embed.add_field(name="Pożyczone pieniądze:", value=loan, inline=False)
             embed.set_footer(text="Pozdrawiamy ASMbank")
             await ctx.respond(embed=embed)
         else:
