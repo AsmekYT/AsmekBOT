@@ -219,7 +219,7 @@ async def loan(ctx, amount: int):
 
     # sprawdzamy, czy kwota jest mniejsza niż 100 000
     if amount > 100000:
-        await ctx.respond('Nie można wypożyczyć kwoty większej niż 100000.')
+        await ctx.respond('Nie można wypożyczyć kwoty większej niż 100 000.')
         return
 
     # obliczamy odsetki
@@ -240,7 +240,7 @@ async def loan(ctx, amount: int):
 
     # dodajemy zadanie do harmonogramu automatycznego spłacania
     rate = total / 30
-    schedule.every(1).day.at('00:00').do(pay_loan_rate, user_id, rate)
+    client.scheduler.add_job(pay_loan_rate, 'interval', days=1, args=[user_id, rate])
 
     # wyświetlamy informację o pożyczce
     loan_amount = data[user_id]['loan']
@@ -249,6 +249,22 @@ async def loan(ctx, amount: int):
     if user_id in data and data[user_id]['loan_active']:
         remaining_rates = round(data[user_id]['loan'] / rate)
     await ctx.respond(f'Wypożyczono {total} monet. Spłacaj w ciągu {num_of_rates} dni. Pozostało {loan_amount} monet (pozostało {remaining_rates} rat).')
+
+async def pay_loan_rate(user_id, rate):
+    with open('economy_data.json', 'r') as f:
+        data = json.load(f)
+
+    if user_id not in data or not data[user_id]['loan_active']:
+        return
+
+    loan_amount = data[user_id]['loan']
+    data[user_id]['money'] -= rate
+    data[user_id]['loan'] -= rate
+    if data[user_id]['loan'] <= 0:
+        data[user_id]['loan_active'] = False
+
+    with open('economy_data.json', 'w') as f:
+        json.dump(data, f)
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
