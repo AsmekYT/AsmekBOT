@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "**3.2.1 [ALFA]**"
+bot_version = "**3.2.2 [ALFA]**"
 
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
@@ -123,25 +123,27 @@ async def iq(ctx):
 
 @client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
 async def ball(ctx, wiadomość):
-
-    # Sprawdzanie słów zabronionych
-    zakazane_slowa = ["valotant", "valo", "vl"]
-    for slowo in zakazane_slowa:
-        if slowo in wiadomość:
-            await ctx.respond("Nie można używać takich słów!")
-            return
-
-    # Wczytanie danych z pliku
-    with open("8ball_data.json", "r") as f:
-        data = json.load(f)
-
-        # Zapisanie danych do pliku
-        with open("8ball_data.json", "w") as f:
-            json.dump(data, f)
-
-    # Wyświetlenie wyniku
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
-    await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```"
+    zakazane_slowa = ["valorant", "valo", "vl"]
+    for slowo in zakazane_slowa:
+        if slowo in wiadomość.lower():
+            ctx.respond("użyłeś zakazanego wyrazu") 
+    
+    try:
+        with open("8ball_data.json", "r") as f:
+            data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        data = {}
+    
+    if wiadomość in data:
+        odpowiedz = data[wiadomość]
+    else:
+        odpowiedz = random.choice(spis)
+        data[wiadomość] = odpowiedz
+        with open("8ball_data.json", "w") as f:
+            json.dump(data, f, indent=4)
+    
+    await ctx.respond("Na pytanie o treści `" + wiadomość + "` bot odpowiada: ```" + odpowiedz + "```")
 
 #komendy muzyczne
 @client.slash_command(name = "play", description = "Umożliwia puszczanie muzyki poprzez linki z youtube")
