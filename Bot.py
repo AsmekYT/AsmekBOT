@@ -110,7 +110,7 @@ async def ping(ctx):
 @client.slash_command(name = "iq", description = "Losuje znaczy pokazuje twoje iq w skali od 50 do 200")
 async def iq(ctx):
     user_id = str(ctx.author.id) # Pobranie ID autora komendy
-    with open('iq.json', 'r') as f:
+    with open('iq_data.json', 'r') as f:
         iq_data = json.load(f) # Załadowanie danych z pliku JSON
     if user_id not in iq_data:
         iq_data[user_id] = random.randint(50, 200) # Losowanie IQ dla nowego użytkownika
@@ -119,15 +119,37 @@ async def iq(ctx):
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
     await ctx.respond(embed=embed)
     with open('iq.json', 'w') as f:
-        json.dump(iq_data, f) # Zapisanie danych do pliku JSON
+        json.dump(iq_data, f) # Zapisanie danych do pliku Json
 
 @client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
 async def ball(ctx, wiadomość):
+
+    # Sprawdzanie słów zabronionych
+    zakazane_slowa = ["valotant", "valo", "vl"]
+    for slowo in zakazane_slowa:
+        if slowo in wiadomość:
+            await ctx.respond("Nie można używać takich słów!")
+            return
+
+    # Wczytanie danych z pliku
+    with open("8ball_data.json", "r") as f:
+        data = json.load(f)
+
+    # Sprawdzenie, czy użytkownik ma już wygenerowane IQ
+    if str(ctx.author.id) in data:
+        number = data[str(ctx.author.id)]
+    else:
+        number = random.randrange(50, 201)
+        data[str(ctx.author.id)] = number
+
+        # Zapisanie danych do pliku
+        with open("iq_data.json", "w") as f:
+            json.dump(data, f)
+
+    # Wyświetlenie wyniku
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
-    #lista_zakazana = [valorant, valo, vl]
-    #if lista_zakazana in wiadomość:
-        #mute()
-    await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```")
+    await ctx.respond("na wiadomość o treści `" + wiadomość + "` bot odpowiada: ```" + random.choice(spis) + "```\n" +
+                       "Twoje IQ wynosi: " + str(number))
 
 #komendy muzyczne
 @client.slash_command(name = "play", description = "Umożliwia puszczanie muzyki poprzez linki z youtube")
