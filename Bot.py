@@ -221,21 +221,32 @@ async def loan(ctx, amount: int):
         return
 
     # obliczamy odsetki
-    interest = int(amount * 0.1)
+    interest = int(amount * 0.05)
     total = amount + interest
 
-    # dodajemy pieniądze do salda użytkownika
+    # dodajemy pieniądze do salda użytkownika i wartości pożyczki
     if user_id in data:
         data[user_id]['money'] += total
+        data[user_id]['loan'] = total
         data[user_id]['loan_active'] = True
     else:
-        data[user_id] = {'money': total, 'bank': 0, 'loan': 0, 'loan_active': True}
+        data[user_id] = {'money': total, 'bank': 0, 'loan': total, 'loan_active': True}
 
     # zapisujemy zmiany w pliku JSON
     with open('economy_data.json', 'w') as f:
         json.dump(data, f)
 
-    await ctx.respond(f'Wypożyczono {total} monet. Spłacaj w ciągu 30 dni.')
+    # dodajemy zadanie do harmonogramu automatycznego spłacania
+    rate = total / 30
+    schedule.every(1).day.at('00:00').do(pay_loan_rate, user_id, rate)
+
+    # wyświetlamy informację o pożyczce
+    loan_amount = data[user_id]['loan']
+    num_of_rates = 30
+    remaining_rates = num_of_rates
+    if user_id in data and data[user_id]['loan_active']:
+        remaining_rates = round(data[user_id]['loan'] / rate)
+    await ctx.respond(f'Wypożyczono {total} monet. Spłacaj w ciągu {num_of_rates} dni. Pozostało {loan_amount} monet (pozostało {remaining_rates} rat).')
 
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
