@@ -182,22 +182,25 @@ async def play(ctx, url : str):
 
 #ekonomia
 @client.slash_command()
-@commands.is_owner()
-async def bal(ctx):
-    with open('economy_data.json', 'r') as f:
-        data = json.load(f)
-    user_id = str(ctx.author.id)
-    if user_id in data:
-        embed = discord.Embed(title="Balance", description="Twoja liczba pieniędzy zarówno w banku jak i gotówki",
-                              color=0x00bd03)
-        embed.set_author(name="Bank")
-        money = data[user_id]['money']
-        embed.add_field(name="Gotówka", value=money, inline=False)
-        embed.add_field(name="Pieniądze w banku", value="undefined", inline=False)
-        embed.set_footer(text="Pozdrawiamy ASMbank")
-        await ctx.respond(embed=embed)
-    else:
-        await ctx.respond(f"{ctx.author.mention}, nie posiadasz jeszcze żadnych środków na koncie możesz zarobić trochę komendą /work lub wziąść pożyczkę komedą /loan.")
+if not ctx.author.guild_permissions.is_owner():
+    await ctx.author.send("Nie masz uprawnień do wykonania tej komendy.")
+    return
+
+else:
+    async def bal(ctx):
+        with open('economy_data.json', 'r') as f:
+            data = json.load(f)
+        user_id = str(ctx.author.id)
+        if user_id in data:
+            embed = discord.Embed(title="Balance", description="Twoja liczba pieniędzy zarówno w banku jak i gotówki", color=0x00bd03)
+            embed.set_author(name="Bank")
+            money = data[user_id]['money']
+            embed.add_field(name="Gotówka", value=money, inline=False)
+            embed.add_field(name="Pieniądze w banku", value="undefined", inline=False)
+            embed.set_footer(text="Pozdrawiamy ASMbank")
+            await ctx.respond(embed=embed)
+        else:
+            await ctx.respond(f"{ctx.author.mention}, nie posiadasz jeszcze żadnych środków na koncie możesz zarobić trochę komendą /work lub wziąść pożyczkę komedą /loan.")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
