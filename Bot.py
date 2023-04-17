@@ -196,7 +196,10 @@ else:
             embed.set_author(name="Bank")
             money = data[user_id]['money']
             embed.add_field(name="Gotówka", value=money, inline=False)
-            embed.add_field(name="Pieniądze w banku", value="undefined", inline=False)
+            bank = data[user_id]['bank']
+            embed.add_field(name="Pieniądze w banku", value=bank, inline=False)
+            loan = data[user_id]['loan']
+            embed.add_field(name="Pożyczone pieniądze", value=loan, inline=False)
             embed.set_footer(text="Pozdrawiamy ASMbank")
             await ctx.respond(embed=embed)
         else:
