@@ -120,7 +120,7 @@ async def iq(ctx):
     embed=discord.Embed(color=0x0011ff)
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
     await ctx.respond(embed=embed)
-    with open('iq.json', 'w') as f:
+    with open('iq_data.json', 'w') as f:
         json.dump(iq_data, f) # Zapisanie danych do pliku Json
 
 @client.command(name="8ball", description="Odpowiada na zadane pytanie")
