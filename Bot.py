@@ -226,7 +226,7 @@ async def loan(ctx, amount: int):
 
     # dodajemy pieniądze do salda użytkownika i wartości pożyczki
     if user_id in data:
-        data[user_id]['money'] += total
+        data[user_id]['money'] += amount
         data[user_id]['loan'] = total
         data[user_id]['loan_active'] = True
     else:
@@ -247,7 +247,6 @@ async def loan(ctx, amount: int):
     if user_id in data and data[user_id]['loan_active']:
         remaining_rates = round(data[user_id]['loan'] / rate)
     await ctx.respond(f'Wypożyczono {total} monet. Spłacaj w ciągu {num_of_rates} dni. Pozostało {loan_amount} monet (pozostało {remaining_rates} rat).')
-
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
