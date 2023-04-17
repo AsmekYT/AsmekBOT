@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "**3.1.0 [ALFA]**"
+bot_version = "**3.2.1 [ALFA]**"
 
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
@@ -10,6 +10,7 @@ import datetime
 import time
 import youtube_dl
 import os
+import json
 
 #zmienne
 intents = discord.Intents.all()
@@ -108,10 +109,17 @@ async def ping(ctx):
 #komendy for fun
 @client.slash_command(name = "iq", description = "Losuje znaczy pokazuje twoje iq w skali od 50 do 200")
 async def iq(ctx):
-    number = random.randrange(1, 200)
+    user_id = str(ctx.author.id) # Pobranie ID autora komendy
+    with open('iq.json', 'r') as f:
+        iq_data = json.load(f) # Załadowanie danych z pliku JSON
+    if user_id not in iq_data:
+        iq_data[user_id] = random.randint(50, 200) # Losowanie IQ dla nowego użytkownika
+    number = iq_data[user_id] # Pobranie IQ użytkownika
     embed=discord.Embed(color=0x0011ff)
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
     await ctx.respond(embed=embed)
+    with open('iq.json', 'w') as f:
+        json.dump(iq_data, f) # Zapisanie danych do pliku JSON
 
 @client.command(name = "8ball", description = "Odpowiada na zadane pytanie")
 async def ball(ctx, wiadomość):
