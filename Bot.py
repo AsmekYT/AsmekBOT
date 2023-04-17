@@ -12,6 +12,8 @@ import youtube_dl
 import os
 import json
 import string
+import schedule
+
 
 #zmienne
 intents = discord.Intents.all()
