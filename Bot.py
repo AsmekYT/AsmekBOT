@@ -109,13 +109,13 @@ async def ping(ctx):
     await ctx.respond("Pong!")
 
 #komendy for fun
-@client.slash_command(name = "iq", description = "Losuje znaczy pokazuje twoje iq w skali od 50 do 200")
+@client.slash_command(name = "iq", description = "Losuje znaczy pokazuje twoje iq w skali od 50 do 150")
 async def iq(ctx):
     user_id = str(ctx.author.id) # Pobranie ID autora komendy
     with open('iq_data.json', 'r') as f:
         iq_data = json.load(f) # Załadowanie danych z pliku JSON
     if user_id not in iq_data:
-        iq_data[user_id] = random.randint(50, 200) # Losowanie IQ dla nowego użytkownika
+        iq_data[user_id] = random.randint(50, 150) # Losowanie IQ dla nowego użytkownika
     number = iq_data[user_id] # Pobranie IQ użytkownika
     embed=discord.Embed(color=0x0011ff)
     embed.add_field(name="Twoje IQ wynosi:", value=number, inline=True)
