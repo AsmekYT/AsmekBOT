@@ -82,6 +82,7 @@ async def clear(ctx, liczba_wiadomości: int):
     await ctx.respond(embed=embed, delete_after=10)
     
 @client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
+@commands.is_owner()
 async def setweryfikacja(ctx):
     msg = await ctx.send("Aby się zweryfikować naciśnij emotkę poniżej")
     await msg.add_reaction('✅')
@@ -181,6 +182,7 @@ async def play(ctx, url : str):
 
 #ekonomia
 @client.slash_command()
+@commands.is_owner()
 async def bal(ctx):
     with open('economy_data.json', 'r') as f:
         data = json.load(f)
