@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "**3.2.3 [ALFA]**"
+bot_version = "**3.2.4 [ALFA]**"
 
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
@@ -178,6 +178,18 @@ async def play(ctx, url : str):
         if file.endswith(".mp3"):
             os.rename(file, "song.mp3")
     voice.play(discord.FFmpegPCMAudio("song.mp3"))
+
+#ekonomia
+@client.slash_command()
+async def bal(ctx):
+    with open('economy_data.json', 'r') as f:
+        data = json.load(f)
+    user_id = str(ctx.author.id)
+    if user_id in data:
+        money = data[user_id]['money']
+        await ctx.send(f"{ctx.author.mention}, masz {money} monet.")
+    else:
+        await ctx.send(f"{ctx.author.mention}, nie posiadasz jeszcze żadnych monet.")
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
