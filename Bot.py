@@ -182,7 +182,7 @@ async def play(ctx, url : str):
 
 #ekonomia
 @client.slash_command()
-if not ctx.author.guild_permissions.is_owner():
+if not ctx.author.guild_permissions.command.is_owner():
     await ctx.author.send("Nie masz uprawnień do wykonania tej komendy.")
     return
 
