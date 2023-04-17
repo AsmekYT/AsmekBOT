@@ -204,6 +204,39 @@ async def bal(ctx):
         else:
             await ctx.respond(f"{ctx.author.mention}, nie posiadasz jeszcze żadnych środków na koncie możesz zarobić trochę komendą /work lub wziąść pożyczkę komedą /loan.")
 
+@client.slash_command(name="loan", description="Wzięcie pożyczki z 10% oprocentowaniem")
+async def loan(ctx):
+    with open('economy_data.json', 'r') as f:
+        data = json.load(f)
+
+    user_id = str(ctx.author.id)
+    if user_id not in data:
+        data[user_id] = {
+            "money": 0,
+            "bank": 0,
+            "loan": {
+                "amount": 0,
+                "taken": False
+            }
+        }
+
+    if data[user_id]["loan"]["taken"]:
+        await ctx.respond("Możesz wziąć tylko jedną pożyczkę na raz.")
+        return
+
+    loan_amount = 100000
+    if data[user_id]["bank"] < loan_amount:
+        await ctx.respond("Nie masz wystarczającej ilości pieniędzy na koncie bankowym.")
+        return
+
+    data[user_id]["bank"] -= loan_amount
+    data[user_id]["loan"]["amount"] = loan_amount
+    data[user_id]["loan"]["taken"] = True
+
+    await ctx.respond(f"Wziąłeś pożyczkę w wysokości {loan_amount} z 10% oprocentowaniem.")
+    with open('economy_data.json', 'w') as f:
+        json.dump(data, f)
+
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
 
