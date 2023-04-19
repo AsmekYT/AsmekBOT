@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "**3.2.4 [ALFA]**"
+bot_version = "**3.2.5 [ALFA]**"
 
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
@@ -107,12 +107,21 @@ async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie poda
 
 #@commands.command()
 #async def mute(ctx, member: discord.Member):
-    #await member.edit(mute=True)
+    #await member.edit(mute=True) 
 
-@client.slash_command(name = "clear", description = "Komenda umożliwiająca czyszczenie czatu")
+@client.slash_command(name="clear", description="Komenda umożliwiająca czyszczenie czatu.")
 @has_permissions(manage_messages=True)
 async def clear(ctx, liczba_wiadomości: int):
+    if ctx.channel.type == discord.ChannelType.private:
+        await ctx.respond("Nie możesz używać tej komendy na prywatnej wiadomości.")
+        return
+
+    if liczba_wiadomości <= 0:
+        await ctx.respond("Podaj liczbę wiadomości większą niż 0.")
+        return
+
     await ctx.channel.purge(limit=liczba_wiadomości)
+
     embed = discord.Embed(title="Czyszczenie wiadomości", color=0x00e1ff)
     embed.add_field(name="Wyczyszczono następującą liczbę wiadomości: ", value=liczba_wiadomości, inline=False)
     await ctx.respond(embed=embed, delete_after=10)
