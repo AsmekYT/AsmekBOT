@@ -43,18 +43,36 @@ async def on_member_remove(member):
 
 
 #komendy administracyjne
-@client.slash_command(name = "ban", description = "Komenda służąca do permanentnego zbanowania urzytkownika", guild=discord.Object(id=12417128931))
+@client.slash_command(name="ban", description="Komenda służąca do permanentnego zbanowania urzytkownika", guild=discord.Object(id=12417128931))
 @has_permissions(ban_members=True)
-async def ban(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"):
-    embed=discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
+async def ban(ctx, użytkownik: discord.Member, powód="Administrator nie podał powodu"):
+    if ctx.channel.type == discord.ChannelType.private:
+        await ctx.respond("Nie możesz używać tej komendy na prywatnej wiadomości.")
+        return
+
+    if not ctx.channel.permissions_for(ctx.guild.me).ban_members:
+        await ctx.author.send("Nie mam uprawnień, aby zbanować użytkownika na tym kanale.")
+        return
+
+    if not ctx.channel.permissions_for(ctx.author).ban_members:
+        await ctx.respond("Nie masz uprawnień, aby użyć tej komendy.")
+        return
+    
+    embed = discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
     embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
     embed.add_field(name="Za:", value=powód, inline=False)
     await ctx.respond(embed=embed)
-    embed2=discord.Embed(title="Zbanowano cię", description="Zostałeś zbanowany przez admina", color=0x0011ff)
+    
+    embed2 = discord.Embed(title="Zbanowano cię", description="Zostałeś zbanowany przez admina", color=0x0011ff)
     embed2.add_field(name="Zbanowano:", value=użytkownik, inline=True)
     embed2.add_field(name="Za:", value=powód, inline=False)
-    await użytkownik.create_dm()
-    await użytkownik.dm_channel.send(embed=embed2)
+    
+    try:
+        await użytkownik.create_dm()
+        await użytkownik.dm_channel.send(embed=embed2)
+    except:
+        pass
+    
     await użytkownik.ban(reason=powód)
     
 @client.slash_command(name = "kick", description = "Komenda do wurzucenia gracza z serwera.")
