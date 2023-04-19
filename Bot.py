@@ -172,9 +172,6 @@ async def iq(ctx):
 async def ball(ctx, wiadomość: str):
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
     zakazane_slowa = ["valorant", "valo", "vl"]
-    
-    # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery
-    wiadomość = ''.join(c for c in wiadomość if c not in string.punctuation).lower()
 
     # Sprawdź, czy wiadomość to znak lub znaki interpunkcyjne
     if all(c in string.punctuation for c in wiadomość):
@@ -185,7 +182,9 @@ async def ball(ctx, wiadomość: str):
                 await ctx.respond("Użyłeś zakazanego wyrazu.")
                 return
 
-        try:
+    # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery 
+     wiadomość = ''.join(c for c in wiadomość if c not in string.punctuation).lower() 
+         try:
             with open("8ball_data.json", "r") as f:
                 data = json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
