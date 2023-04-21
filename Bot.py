@@ -168,35 +168,37 @@ async def iq(ctx):
     with open('iq_data.json', 'w') as f:
         json.dump(iq_data, f) # Zapisanie danych do pliku Json
 
-@commands.slash_command(name="8ball", description="Odpowiada na zadane pytanie")
-async def ball(ctx, wiadomość: str):
-    spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]
-    zakazane_slowa = ["valorant", "valo", "vl"]
-    
-    # Sprawdź, czy wiadomość to znak lub znaki interpunkcyjne
-    if all(c in string.punctuation for c in wiadomość):
-        await ctx.respond('pytanie musi zawierać litery')
-    else:
-        # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery
-        wiadomość = ''.join(c for c in wiadomość if c not in string.punctuation).lower()
-        for slowo in zakazane_slowa:
-            if slowo in wiadomość:
-                await ctx.respond("Użyłeś zakazanego wyrazu.")
-                return
+@commands.slash_command(name="8ball", description="Odpowiada na zadane pytanie") 
+async def ball(ctx, wiadomość: str): 
+    spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"] 
+    zakazane_slowa = ["valorant", "valo", "vl"] 
 
-        try:
-            with open("8ball_data.json", "r") as f:
-                data = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            data = {}
+    # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery 
+    wiadomość = ''.join(c for c in wiadomość if c not in string.punctuation).lower() 
 
-        if wiadomość in data:
-            odpowiedz = data[wiadomość]
-        else:
-            odpowiedz = random.choice(spis)
-            data[wiadomość] = odpowiedz
-            with open("8ball_data.json", "w") as f:
-                json.dump(data, f, indent=4)
+    # Sprawdź, czy wiadomość zawiera tylko znaki interpunkcyjne lub jest pusta 
+    if not any(c.isalpha() for c in wiadomość): 
+        await ctx.respond('Pytanie musi zawierać przynajmniej jedną literę.') 
+        return 
+
+    for slowo in zakazane_slowa: 
+        if slowo in wiadomość: 
+            await ctx.respond("Użyłeś zakazanego wyrazu.") 
+            return 
+
+    try: 
+        with open("8ball_data.json", "r") as f: 
+            data = json.load(f) 
+    except (FileNotFoundError, json.JSONDecodeError): 
+        data = {} 
+
+    if wiadomość in data: 
+        odpowiedz = data[wiadomość] 
+    else: 
+        odpowiedz = random.choice(spis) 
+        data[wiadomość] = odpowiedz 
+        with open("8ball_data.json", "w") as f: 
+            json.dump(data, f, indent=4) 
 
     await ctx.respond(f"Na pytanie o treści `{wiadomość}` bot odpowiada: ```{odpowiedz}```")
 
