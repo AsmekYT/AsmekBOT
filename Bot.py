@@ -175,7 +175,7 @@ async def ball(ctx, wiadomość: str):
     
     # Sprawdź, czy wiadomość to znak lub znaki interpunkcyjne
     if all(c in string.punctuation for c in wiadomość):
-        ctx.respond('pytanie musi zawierać litery') 
+        await ctx.respond('pytanie musi zawierać litery')
     else:
         # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery
         wiadomość = ''.join(c for c in wiadomość if c not in string.punctuation).lower()
