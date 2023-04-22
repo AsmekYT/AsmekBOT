@@ -168,7 +168,7 @@ async def iq(ctx):
     with open('iq_data.json', 'w') as f:
         json.dump(iq_data, f) # Zapisanie danych do pliku Json
 
-@commands.slash_command(name="8ball", description="Odpowiada na zadane pytanie") 
+@commands.slash_command(name="8ball", description="Odpowiada na zadane pytanie", guild_id = "955575710221733949") 
 async def ball(ctx, wiadomość: str): 
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"] 
     zakazane_slowa = ["valorant", "valo", "vl"] 
