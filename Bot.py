@@ -151,7 +151,7 @@ async def help(ctx):
 @client.slash_command(name = "ping", description = "Sprawdza czy bot reaguje na komendy", guild=discord.Object(id=12417128931))
 async def ping(ctx):
     print("Działam(komenda ping)")
-    await ctx.respond(f"Pong! (opóźnienie bota wynosi: {bot.latency}!)")
+    await ctx.respond(f"Pong! (opóźnienie bota wynosi: {client.latency}!)")
 
 #komendy for fun
 @client.slash_command(name = "iq", description = "Losuje znaczy pokazuje twoje iq w skali od 50 do 200")
@@ -168,7 +168,7 @@ async def iq(ctx):
     with open('iq_data.json', 'w') as f:
         json.dump(iq_data, f) # Zapisanie danych do pliku Json
 
-@commands.slash_command(name="8ball", description = "Odpowiada na zadane pytanie", guild_id = "955575710221733949") 
+@client.slash_command(name="8ball", description = "Odpowiada na zadane pytanie") 
 async def ball(ctx, wiadomość: str): 
     spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"] 
     zakazane_slowa = ["valorant", "valo", "vl"] 
