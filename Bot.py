@@ -1,6 +1,5 @@
 #wersja bota
-bot_version = "**3.2.5 [ALFA]**"
-
+bot_version = "**3.2.6**"
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
 from discord.ext import commands
@@ -116,6 +115,34 @@ async def kick(ctx, użytkownik: discord.Member, powód="Administrator nie poda�
     embed.add_field(name="Zkickowano:", value=użytkownik, inline=True)  
     embed.add_field(name="Za:", value=powód, inline=False)  
     await ctx.respond(embed=embed) 
+
+@bot.slash_command(name="mute", description="Komenda do wyciszenia użytkownika")
+@commands.has_permissions(mute_members=True)
+async def mute(ctx, member: discord.Member, duration: str = None):
+    if duration is None:
+        await ctx.respond("Nie podano czasu trwania wyciszenia.")
+        return
+
+    # Konwertujemy podany czas trwania wyciszenia na sekundy
+    seconds = await parse_time(duration)
+    if seconds == -1:
+        await ctx.respond("Nieprawidłowy format czasu trwania wyciszenia.")
+        return
+
+    # Tworzymy przerwę dla użytkownika
+    await member.create_timeout(seconds)
+
+    # Wysyłamy wiadomość potwierdzającą wyciszenie użytkownika
+    await ctx.respond(f"{member.mention} został wyciszony na {duration}.")
+
+async def parse_time(time: str) -> int:
+    """Konwertuje czas w formacie Xs, Xm, Xh, Xd na sekundy."""
+    time_dict = {"s": 1, "m": 60, "h": 3600, "d": 86400}
+    try:
+        seconds = int(time[:-1]) * time_dict[time[-1]]
+    except (ValueError, KeyError):
+        seconds = -1
+    return seconds
 
 @client.slash_command(name="clear", description="Komenda umożliwiająca czyszczenie czatu.")
 @has_permissions(manage_messages=True)
