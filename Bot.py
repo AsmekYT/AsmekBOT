@@ -166,7 +166,7 @@ async def unban(ctx, użytkownik: discord.User):
     await ctx.guild.unban(user)
     await ctx.send(f"{user.mention} został odblokowany.")
 
-@bot.slash_command()
+@client.slash_command()
 async def banlist(ctx: SlashContext):
     ban_list = await ctx.guild.bans()
     banned_users = [f"{user.name}#{user.discriminator} ({user.id})" for ban_entry in ban_list if (user := ban_entry.user)]
