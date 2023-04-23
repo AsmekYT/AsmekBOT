@@ -218,39 +218,42 @@ async def iq(ctx):
     with open('iq_data.json', 'w') as f:
         json.dump(iq_data, f) # Zapisanie danych do pliku Json
 
-@client.slash_command(name="8ball", description = "Odpowiada na zadane pytanie") 
-async def ball(ctx, wiadomość: str): 
-    spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"] 
-    zakazane_slowa = ["valorant", "valo", "vl"] 
-
-    # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery 
-    wiadomość = ''.join(c for c in wiadomość if c not in string.punctuation).lower() 
-
-    # Sprawdź, czy wiadomość zawiera tylko znaki interpunkcyjne lub jest pusta 
-    if not any(c.isalpha() for c in wiadomość): 
-        await ctx.respond('Pytanie musi zawierać przynajmniej jedną literę.') 
-        return 
-
-    for slowo in zakazane_slowa: 
-        if slowo in wiadomość: 
-            await ctx.respond("Użyłeś zakazanego wyrazu.") 
-            return 
-
-    try: 
-        with open("8ball_data.json", "r") as f: 
-            data = json.load(f) 
-    except (FileNotFoundError, json.JSONDecodeError): 
-        data = {} 
-
-    if wiadomość in data: 
-        odpowiedz = data[wiadomość] 
-    else: 
-        odpowiedz = random.choice(spis) 
-        data[wiadomość] = odpowiedz 
-        with open("8ball_data.json", "w") as f: 
-            json.dump(data, f, indent=4) 
-
-    await ctx.respond(f"Na pytanie o treści `{wiadomość}` bot odpowiada: ```{odpowiedz}```")
+@client.slash_command(name="8ball", description="Odpowiada na zadane pytanie")  
+async def ball(ctx, wiadomosc: str):  
+    spis = ["Tak", "Nie", "Oczywiście", "Jasne!!!", "Jak najbardziej", "jak to?", "Nope", "Nieeeee!!!"]  
+    zakazane_slowa = ["valorant", "valo", "vl"]  
+  
+    # Usuń wszystkie znaki interpunkcyjne i zamień na małe litery  
+    wiadomosc = ''.join(c for c in wiadomosc if c not in string.punctuation).lower()  
+    if len(wiadomosc) > 75:
+        await ctx.respond('Pytanie może mieć maksymalnie 75 znaków.')
+        return
+  
+    # Sprawdź, czy wiadomość zawiera tylko znaki interpunkcyjne lub jest pusta  
+    if not any(c.isalpha() for c in wiadomosc):  
+        await ctx.respond('Pytanie musi zawierać przynajmniej jedną literę.')  
+        return  
+  
+    for slowo in zakazane_slowa:  
+        if slowo in wiadomosc:  
+            await ctx.respond("Użyłeś zakazanego wyrazu.")  
+            return  
+  
+    try:  
+        with open("8ball_data.json", "r") as f:  
+            data = json.load(f)  
+    except (FileNotFoundError, json.JSONDecodeError):  
+        data = {}  
+  
+    if wiadomosc in data:  
+        odpowiedz = data[wiadomosc]  
+    else:  
+        odpowiedz = random.choice(spis)  
+        data[wiadomosc] = odpowiedz  
+        with open("8ball_data.json", "w") as f:  
+            json.dump(data, f, indent=4)  
+  
+    await ctx.respond(f"Na pytanie o treści `{wiadomosc}` bot odpowiada: ```{odpowiedz}```") 
 
 #komendy muzyczne
 @client.slash_command(name = "play", description = "Umożliwia puszczanie muzyki poprzez linki z youtube")
