@@ -43,71 +43,79 @@ async def on_member_remove(member):
 
 
 #komendy administracyjne
-@client.slash_command(name="ban", description="Komenda służąca do permanentnego zbanowania urzytkownika", guild=discord.Object(id=12417128931))
-@has_permissions(ban_members=True)
-async def ban(ctx, użytkownik: discord.Member, powód="Administrator nie podał powodu"):
-    if ctx.channel.type == discord.ChannelType.private:
-        await ctx.respond("Nie możesz używać tej komendy na prywatnej wiadomości.")
+@client.slash_command(name="ban", description="Komenda służąca do permanentnego zbanowania użytkownika", guild=discord.Object(id=12417128931)) 
+@has_permissions(ban_members=True) 
+async def ban(ctx, użytkownik: discord.Member, powód="Administrator nie podał powodu"): 
+    if ctx.channel.type == discord.ChannelType.private: 
+        await ctx.respond("Nie możesz używać tej komendy na prywatnej wiadomości.") 
+        return 
+
+    if not ctx.channel.permissions_for(ctx.guild.me).ban_members: 
+        await ctx.author.send("Nie mam uprawnień, aby zbanować użytkownika na tym kanale.") 
+        return 
+
+    if not ctx.channel.permissions_for(ctx.author).ban_members: 
+        await ctx.respond("Nie masz uprawnień, aby użyć tej komendy.") 
+        return 
+    
+    if użytkownik == ctx.author or użytkownik == ctx.guild.owner or użytkownik.top_role >= ctx.author.top_role:
+        await ctx.respond("Nie możesz zbanować tego użytkownika.")
         return
 
-    if not ctx.channel.permissions_for(ctx.guild.me).ban_members:
-        await ctx.author.send("Nie mam uprawnień, aby zbanować użytkownika na tym kanale.")
-        return
-
-    if not ctx.channel.permissions_for(ctx.author).ban_members:
-        await ctx.respond("Nie masz uprawnień, aby użyć tej komendy.")
-        return
-    
-    embed = discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff)
-    embed.add_field(name="Zbanowano:", value=użytkownik, inline=True)
-    embed.add_field(name="Za:", value=powód, inline=False)
-    await ctx.respond(embed=embed)
-    
-    embed2 = discord.Embed(title="Zbanowano cię", description="Zostałeś zbanowany przez admina", color=0x0011ff)
-    embed2.add_field(name="Zbanowano:", value=użytkownik, inline=True)
-    embed2.add_field(name="Za:", value=powód, inline=False)
-    
-    try:
-        await użytkownik.create_dm()
-        await użytkownik.dm_channel.send(embed=embed2)
-    except:
-        pass
-    
-    await użytkownik.ban(reason=powód)
-    
-@client.slash_command(name="kick", description="Komenda do wyrzucenia gracza z serwera.") 
-@has_permissions(kick_members=True)
-async def kick(ctx, użytkownik : discord.Member, powód="Administrator nie podał powodu"): 
-    if ctx.channel.type == discord.ChannelType.private:
-        await ctx.respond("Nie możesz używać tej komendy na prywatnej wiadomości.")
-        return
-
-    if not ctx.channel.permissions_for(ctx.guild.me).kick_members:
-        await ctx.author.send("Nie mam uprawnień, aby wyrzucić użytkownika z tego kanału.")
-        return
-
-    if not ctx.channel.permissions_for(ctx.author).kick_members:
-        await ctx.respond("Nie masz uprawnień, aby użyć tej komendy.")
-        return
-    
-    embed2 = discord.Embed(title="Wyrzucono cię", description="Zostałeś wyrzucony przez admina", color=0x0011ff) 
-    embed2.add_field(name="Zkickowano:", value=użytkownik, inline=True) 
-    embed2.add_field(name="Za:", value=powód, inline=False) 
-    try:
-        await użytkownik.create_dm()
-        await użytkownik.dm_channel.send(embed=embed2)
-    except:
-        pass
-    
-    await użytkownik.kick(reason=powód) 
-    embed = discord.Embed(title="Kick", description="Użyto komendy kick", color=0x0011ff) 
-    embed.add_field(name="Zkickowano:", value=użytkownik, inline=True) 
+    embed = discord.Embed(title="Ban", description="Użyto komendy ban", color=0x0011ff) 
+    embed.add_field(name="Zbanowano:", value=użytkownik, inline=True) 
     embed.add_field(name="Za:", value=powód, inline=False) 
-    await ctx.respond(embed=embed)
+    await ctx.respond(embed=embed) 
+    
+    embed2 = discord.Embed(title="Zbanowano cię", description="Zostałeś zbanowany przez admina", color=0x0011ff) 
+    embed2.add_field(name="Zbanowano:", value=użytkownik, inline=True) 
+    embed2.add_field(name="Za:", value=powód, inline=False) 
 
-#@commands.command()
-#async def mute(ctx, member: discord.Member):
-    #await member.edit(mute=True) 
+    try: 
+        await użytkownik.create_dm() 
+        await użytkownik.dm_channel.send(embed=embed2) 
+    except: 
+        pass 
+    
+    await użytkownik.ban(reason=powód) 
+
+@client.slash_command(name="kick", description="Komenda do wyrzucenia gracza z serwera.")  
+@has_permissions(kick_members=True) 
+async def kick(ctx, użytkownik: discord.Member, powód="Administrator nie podał powodu"):  
+    if ctx.channel.type == discord.ChannelType.private: 
+        await ctx.respond("Nie możesz używać tej komendy na prywatnej wiadomości.") 
+        return 
+  
+    if not ctx.channel.permissions_for(ctx.guild.me).kick_members: 
+        await ctx.author.send("Nie mam uprawnień, aby wyrzucić użytkownika z tego kanału.") 
+        return 
+  
+    if not ctx.channel.permissions_for(ctx.author).kick_members: 
+        await ctx.respond("Nie masz uprawnień, aby użyć tej komendy.") 
+        return 
+    
+    if użytkownik == ctx.author:
+        await ctx.respond("Nie możesz wyrzucić samego siebie.")
+        return
+    
+    if użytkownik == ctx.guild.owner or użytkownik.top_role >= ctx.author.top_role:
+        await ctx.respond("Nie możesz wyrzucić użytkownika o wyższej lub takiej samej roli.")
+        return
+      
+    embed2 = discord.Embed(title="Wyrzucono cię", description="Zostałeś wyrzucony przez admina", color=0x0011ff)  
+    embed2.add_field(name="Zkickowano:", value=użytkownik, inline=True)  
+    embed2.add_field(name="Za:", value=powód, inline=False)  
+    try: 
+        await użytkownik.create_dm() 
+        await użytkownik.dm_channel.send(embed=embed2) 
+    except: 
+        pass 
+      
+    await użytkownik.kick(reason=powód)  
+    embed = discord.Embed(title="Kick", description="Użyto komendy kick", color=0x0011ff)  
+    embed.add_field(name="Zkickowano:", value=użytkownik, inline=True)  
+    embed.add_field(name="Za:", value=powód, inline=False)  
+    await ctx.respond(embed=embed) 
 
 @client.slash_command(name="clear", description="Komenda umożliwiająca czyszczenie czatu.")
 @has_permissions(manage_messages=True)
