@@ -161,12 +161,12 @@ async def clear(ctx, liczba_wiadomości: int):
     embed.add_field(name="Wyczyszczono następującą liczbę wiadomości: ", value=liczba_wiadomości, inline=False)
     await ctx.respond(embed=embed, delete_after=10)
 
-@bot.slash_command()
+@client.slash_command()
 async def unban(ctx, użytkownik: discord.User):
     await ctx.guild.unban(user)
     await ctx.send(f"{user.mention} został odblokowany.")
 
-@bot.slash_command()
+@client.slash_command()
 async def banlist(ctx):
     bans = await ctx.guild.bans()
     if not bans:
