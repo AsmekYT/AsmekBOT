@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "**3.2.6**"
+bot_version = "**3.2.7**"
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
 from discord.ext import commands
@@ -118,7 +118,7 @@ async def kick(ctx, użytkownik: discord.Member, powód="Administrator nie poda�
 
 @client.slash_command(name="mute", description="Komenda do wyciszenia użytkownika")
 @has_permissions(mute_members=True)
-async def mute(ctx, member: discord.Member, duration: str = None):
+async def mute(ctx, użytkownik: discord.Member, duration: str = None):
     if duration is None:
         await ctx.respond("Nie podano czasu trwania wyciszenia.")
         return
@@ -160,6 +160,22 @@ async def clear(ctx, liczba_wiadomości: int):
     embed = discord.Embed(title="Czyszczenie wiadomości", color=0x00e1ff)
     embed.add_field(name="Wyczyszczono następującą liczbę wiadomości: ", value=liczba_wiadomości, inline=False)
     await ctx.respond(embed=embed, delete_after=10)
+
+@bot.slash_command()
+async def unban(ctx, użytkownik: discord.User):
+    await ctx.guild.unban(user)
+    await ctx.send(f"{user.mention} został odblokowany.")
+
+@bot.slash_command()
+async def banlist(ctx):
+    bans = await ctx.guild.bans()
+    if not bans:
+        await ctx.send("Brak zbanowanych użytkowników na tym serwerze.")
+        return
+    banned_users = [f"{ban.user.name}#{ban.user.discriminator}" for ban in bans]
+    banlist = "\n".join(banned_users)
+    embed = discord.Embed(title="Zbanowani użytkownicy:", description=banlist)
+    await ctx.send(embed=embed)
     
 @client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
 @commands.is_owner()
