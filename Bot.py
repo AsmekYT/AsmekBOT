@@ -116,8 +116,8 @@ async def kick(ctx, użytkownik: discord.Member, powód="Administrator nie poda�
     embed.add_field(name="Za:", value=powód, inline=False)  
     await ctx.respond(embed=embed) 
 
-@bot.slash_command(name="mute", description="Komenda do wyciszenia użytkownika")
-@commands.has_permissions(mute_members=True)
+@client.slash_command(name="mute", description="Komenda do wyciszenia użytkownika")
+@has_permissions(mute_members=True)
 async def mute(ctx, member: discord.Member, duration: str = None):
     if duration is None:
         await ctx.respond("Nie podano czasu trwania wyciszenia.")
