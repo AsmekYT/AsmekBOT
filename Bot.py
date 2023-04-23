@@ -166,16 +166,15 @@ async def unban(ctx, użytkownik: discord.User):
     await ctx.guild.unban(user)
     await ctx.send(f"{user.mention} został odblokowany.")
 
-@client.slash_command()
-async def banlist(ctx):
-    bans = await ctx.guild.bans()
-    if not bans:
-        await ctx.send("Brak zbanowanych użytkowników na tym serwerze.")
+@bot.slash_command()
+async def banlist(ctx: SlashContext):
+    ban_list = await ctx.guild.bans()
+    banned_users = [f"{user.name}#{user.discriminator} ({user.id})" for ban_entry in ban_list if (user := ban_entry.user)]
+    if not banned_users:
+        await ctx.followup.send("Brak zbanowanych użytkowników.")
         return
-    banned_users = [f"{ban.user.name}#{ban.user.discriminator}" for ban in bans]
-    banlist = "\n".join(banned_users)
-    embed = discord.Embed(title="Zbanowani użytkownicy:", description=banlist)
-    await ctx.send(embed=embed)
+    embed = discord.Embed(title="Lista zbanowanych użytkowników", description="\n".join(banned_users), color=discord.Color.red())
+    await ctx.followup.send(embed=embed)
     
 @client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
 @commands.is_owner()
