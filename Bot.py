@@ -159,22 +159,22 @@ async def clear(ctx, liczba_wiadomości: int):
 
     embed = discord.Embed(title="Czyszczenie wiadomości", color=0x00e1ff)
     embed.add_field(name="Wyczyszczono następującą liczbę wiadomości: ", value=liczba_wiadomości, inline=False)
-    await ctx.respond(embed=embed, delete_after=10)
+    await ctx.respond(embed=embed, delete_after = 5) 
 
-@client.slash_command()
-async def unban(ctx, użytkownik: discord.User):
-    await ctx.guild.unban(user)
-    await ctx.send(f"{user.mention} został odblokowany.")
-
-@client.slash_command()
-async def banlist(ctx):
-    ban_list = await ctx.guild.bans()
-    banned_users = [f"{user.name}#{user.discriminator} ({user.id})" for ban_entry in ban_list if (user := ban_entry.user)]
-    if not banned_users:
-        await ctx.followup.send("Brak zbanowanych użytkowników.")
-        return
-    embed = discord.Embed(title="Lista zbanowanych użytkowników", description="\n".join(banned_users), color=discord.Color.red())
+@client.slash_command() 
+async def banlist(ctx): 
+    ban_list = await ctx.guild.fetch_bans() 
+    banned_users = [f"{user.name}#{user.discriminator} ({user.id})" for ban_entry in ban_list if (user := ban_entry.user)] 
+    if not banned_users: 
+        await ctx.followup.send("Brak zbanowanych użytkowników.") 
+        return 
+    embed = discord.Embed(title="Lista zbanowanych użytkowników", description="\n".join(banned_users), color=discord.Color.red()) 
     await ctx.followup.send(embed=embed)
+
+@client.slash_command() 
+async def unban(ctx, user: discord.User): 
+    await ctx.guild.unban(user)
+    await ctx.send(f"Użytkownik {user.mention} został odbanowany.")
     
 @client.slash_command(name = "ustawweryfikacje", description = "Chwilowo nie działa")
 @commands.is_owner()
