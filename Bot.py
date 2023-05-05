@@ -375,7 +375,7 @@ class MyView(discord.ui.View):
     async def button_callback(self, button, interaction):
         await interaction.response.send_message("Przycisk pod tą wiadomością reaguje!")
 
-@bot.slash_command()
+@client.slash_command()
 async def przycisk(ctx: discord.Interaction):
     embed = discord.Embed(title="Test", description="Embed z przyciskiem")
     view = MyView()
