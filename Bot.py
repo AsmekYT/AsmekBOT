@@ -4,6 +4,7 @@ bot_version = "**3.2.7**"
 import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions
+from discord_components import DiscordComponents, Button, ButtonStyle
 import random
 import datetime
 import time
@@ -368,6 +369,12 @@ async def pay_loan_rate(user_id, rate):
 
     with open('economy_data.json', 'w') as f:
         json.dump(data, f)
+
+#tickety/przyciski/embedy
+@bot.slash_command()
+async def przycisk(ctx):
+    button = Button(style=ButtonStyle.green, label="Kliknij mnie! (i tak nic nie robię)", emoji="👍")
+    await ctx.respond("Poniżej przedstawiam testowy przycisk:", components=[button])
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
 client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
