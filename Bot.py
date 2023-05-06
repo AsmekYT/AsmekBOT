@@ -384,11 +384,16 @@ class TicketView(discord.ui.View):
             await interaction.response.send_message("Nie mogę znaleźć użytkownika.", ephemeral=True)
             return
 
+        ticket_name = f"{member.display_name}-ticket"
         category = discord.utils.get(guild.categories, name="Tickety")
+
         if category is None:
             category = await guild.create_category("Tickety")
 
-        ticket_name = f"{member.display_name}-ticket"
+        if any(c.name == ticket_name for c in category.channels):
+            await interaction.response.send_message(f"Można utworzyć tylko jeden ticket na raz.", ephemeral=True)
+            return
+
         ticket_overwrites = {
             guild.default_role: discord.PermissionOverwrite(read_messages=False),
             member: discord.PermissionOverwrite(read_messages=True, send_messages=True)
@@ -396,8 +401,26 @@ class TicketView(discord.ui.View):
 
         ticket_channel = await category.create_text_channel(name=ticket_name, overwrites=ticket_overwrites)
 
-        await interaction.response.send_message(f"Kanał {ticket_channel.mention} został utworzony.", ephemeral=True)
+        embed = discord.Embed(title="Ticket", description="Twój ticket został utworzony.")
+        close_button = discord.ui.Button(label="Zamknij ticket", style=discord.ButtonStyle.danger)
+        close_button.callback = self.close_ticket
+        view = discord.ui.View()
+        view.add_item(close_button)
+
+        await ticket_channel.send(embed=embed, view=view)
+
+        self.ticket_channel = ticket_channel
+
         self.stop()
+
+    async def close_ticket(self, button: discord.ui.Button, interaction: discord.Interaction):
+        await interaction.response.defer()
+        await self.ticket_channel.delete(reason="Zamknięto ticket.")
+        await interaction.followup.send("Ticket został zamknięty.", ephemeral=True)
+
+        category = self.ticket_channel.category
+        if len(category.channels) == 0:
+            await category.delete()
 
 @client.slash_command()
 async def ticket(ctx: discord.Interaction):
