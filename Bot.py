@@ -370,15 +370,39 @@ async def pay_loan_rate(user_id, rate):
         json.dump(data, f)
 
 #tickety/przyciski/embedy
-class MyView(discord.ui.View):
-    @discord.ui.button(label="Kliknij mnie!", style=discord.ButtonStyle.primary, emoji="😙")
-    async def button_callback(self, button, interaction):
-        await interaction.response.send_message("Przycisk pod tą wiadomością reaguje!")
+class TicketView(discord.ui.View):
+    def __init__(self, user_id):
+        super().__init__()
+        self.user_id = user_id
+
+    @discord.ui.button(label="Stwórz ticket", style=discord.ButtonStyle.primary)
+    async def create_ticket(self, button: discord.ui.Button, interaction: discord.Interaction):
+        guild = interaction.guild
+        member = guild.get_member(self.user_id)
+
+        if member is None:
+            await interaction.response.send_message("Nie mogę znaleźć użytkownika.", ephemeral=True)
+            return
+
+        category = discord.utils.get(guild.categories, name="Tickety")
+        if category is None:
+            category = await guild.create_category("Tickety")
+
+        ticket_name = f"{member.display_name}-ticket"
+        ticket_overwrites = {
+            guild.default_role: discord.PermissionOverwrite(read_messages=False),
+            member: discord.PermissionOverwrite(read_messages=True, send_messages=True)
+        }
+
+        ticket_channel = await category.create_text_channel(name=ticket_name, overwrites=ticket_overwrites)
+
+        await interaction.response.send_message(f"Kanał {ticket_channel.mention} został utworzony.", ephemeral=True)
+        self.stop()
 
 @client.slash_command()
-async def przycisk(ctx: discord.Interaction):
-    embed = discord.Embed(title="Test", description="Embed z przyciskiem")
-    view = MyView()
+async def ticket(ctx: discord.Interaction):
+    view = TicketView(ctx.author.id)
+    embed = discord.Embed(title="Stwórz ticket", description="Kliknij przycisk, aby stworzyć swój ticket.")
     await ctx.respond(embed=embed, view=view)
 
 #token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
