@@ -426,7 +426,7 @@ async def ticket(ctx: discord.Interaction):
     embed = discord.Embed(title="Stwórz ticket", description="Kliknij przycisk, aby stworzyć swój ticket.")
     await ctx.respond(embed=embed, view=view)
 
-#token bota (Na ss lub podczas udostępniana kodu uważać czyli usunąć/zamazać. W przypadku przypadowego udostępnienia natychmiast napisać do: Asmek#4413 na pv z prośbą o zresetowanie tokenu bota)
-client.run("OTUzMzkwMTAxODkzODkwMTc5.GTBH6E.6qdzYdZ_sKwx01nh-yUlsm-w7MAYGa5Xfa0Qf8")
+#token bota
+client.run("")
 
 time.sleep(10)
