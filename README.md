@@ -15,10 +15,12 @@ Bot commands (v2.7.1):
 > Instalation gluide:
 > - install python 3.11.4
 > - in terminal launtch commands:
-> ```pip install schedule
+> ```
+> pip install schedule
 > pip install youtube_dl
 > pip install discord
 > pip install discord.py
-> pip install py-cord```
+> pip install py-cord
+> ```
 
 PS: If you find a bug in alpha v2, you must repair it yourself because I stopped working on this version."
