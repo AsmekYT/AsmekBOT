@@ -6,4 +6,3 @@ Bot commands (v3.0.0):
 - ping
 - settings
 - clear
-# Reminder bot version v2.x.x is only in Polish!!! If you want to use the English bot version, you must download bot v3.x.x, but this version is still in development.
