@@ -7,5 +7,3 @@ Bot commands (v3.0.0):
 - settings
 - clear
 # Reminder bot version v2.x.x is only in Polish!!! If you want to use the English bot version, you must download bot v3.x.x, but this version is still in development.
-
-PS: If you find a bug in alpha v2, you must repair it yourself because I stopped working on this version."
