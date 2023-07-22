@@ -23,4 +23,4 @@ Bot commands (v2.7.1):
 > pip install py-cord
 > ```
 
-PS: If you find a bug in alpha v2, you must repair it yourself because I stopped working on this version."
+PS: If you find a bug in alpha v2, you must repair it yourself because I stopped working on this version.
