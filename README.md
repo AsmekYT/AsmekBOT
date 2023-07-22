@@ -2,10 +2,14 @@
 Bot commands (v2.7.1):
 - kick
 - ban
+- unban
 - clear
+- mute
 - 8ball
 - iq
 - ping
+- help
+- pomoc
 # Reminder bot version v2.x.x is only in Polish!!! If you want to use English bot version u must download bot v3.x.x but this is the version I'm still working on. 
 
 Ps: if u find bug in alfa v2 u must repair it by yourself becouse I stopped working on this version. 
