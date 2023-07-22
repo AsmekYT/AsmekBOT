@@ -1,4 +1,4 @@
-bot_version="alfa v3.0.0"
+bot_version="alfa 3.0.0"
 
 import discord
 from discord.ext import commands
