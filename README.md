@@ -1,3 +1,6 @@
+Discord: https://discord.com/api/guilds/955575710221733949/widget.json
+![BotLogo](https://github.com/AsmekYT/AsmekBOT/assets/98432786/3c8a4ab8-414f-4e3a-8128-94e6d58d9126)
+
 # AsmekBOT is a bot that every server owner need to moderate, chill and play. 
 Bot commands (v2.7.1):
 - kick
