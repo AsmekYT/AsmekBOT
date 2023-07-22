@@ -10,6 +10,6 @@ Bot commands (v2.7.1):
 - ping
 - help
 - pomoc
-# Reminder bot version v2.x.x is only in Polish!!! If you want to use English bot version u must download bot v3.x.x but this is the version I'm still working on. 
+# Reminder bot version v2.x.x is only in Polish!!! If you want to use the English bot version, you must download bot v3.x.x, but this version is still in development.
 
-Ps: if u find bug in alfa v2 u must repair it by yourself becouse I stopped working on this version. 
+PS: If you find a bug in alpha v2, you must repair it yourself because I stopped working on this version."
