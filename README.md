@@ -1,4 +1,4 @@
-# AsmekBOT is a bot every server owner need to moderate, chill and play. 
+# AsmekBOT is a bot that every server owner need to moderate, chill and play. 
 Bot commands (v2.7.1):
 - kick
 - ban
