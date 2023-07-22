@@ -1,3 +1,6 @@
+Discord: <iframe src="https://discord.com/widget?id=955575710221733949&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+![magicut_1670444661914](https://github.com/AsmekYT/AsmekBOT/assets/98432786/3c8a4ab8-414f-4e3a-8128-94e6d58d9126)
+
 # AsmekBOT is a bot that every server owner need to moderate, chill and play. 
 Bot commands (v2.7.1):
 - kick
