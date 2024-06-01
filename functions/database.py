@@ -16,31 +16,18 @@ def create_tables():
     cursor = conn.cursor()
 
     tables = {
-        'wallet': '''
-            CREATE TABLE IF NOT EXISTS wallet (
+        'user_data': '''
+            CREATE TABLE IF NOT EXISTS economy (
                 user_id BIGINT PRIMARY KEY,
-                coins INT
-            )
-        ''',
-        'bank': '''
-            CREATE TABLE IF NOT EXISTS bank (
-                user_id BIGINT PRIMARY KEY,
-                coins INT
-            )
-        ''',
-        'loans': '''
-            CREATE TABLE IF NOT EXISTS loans (
-                loan_id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id BIGINT,
-                amount INT,
-                status VARCHAR(255),
-                FOREIGN KEY (user_id) REFERENCES wallet(user_id)
-            )
-        ''',
-        'cooldowns': '''
-            CREATE TABLE IF NOT EXISTS cooldowns (
-                user_id BIGINT PRIMARY KEY,
-                last_used TIMESTAMP
+                wallet_coins INT,
+                bank_coins INT,
+                work_last_used TIMESTAMP NULL DEFAULT NULL,
+                slut_last_used TIMESTAMP NULL DEFAULT NULL,
+                crime_last_used TIMESTAMP NULL DEFAULT NULL,
+                xp INT,
+                loans INT,
+                loan_amount INT,
+                loan_status VARCHAR(255)
             )
         ''',
         'verification_channels': '''

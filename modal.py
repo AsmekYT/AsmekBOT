@@ -4,7 +4,7 @@ import mysql.connector
 import random
 import string
 import embed
-
+import asyncio
 
 
 
@@ -131,3 +131,46 @@ class AddFieldModal(discord.ui.Modal):
 
         self.view.embed.add_field(name=field_name, value=field_value, inline=inline)
         await interaction.response.send_message("Field added!", ephemeral=True)
+
+
+
+class AmountModal(discord.ui.Modal):
+    def __init__(self):
+        super().__init__(title="How much money do you want to loan?")
+
+        discord.ui.InputText(label="Loan amount:", placeholder="Enter the amount you want to loan")
+
+    async def callback(self, interaction: discord.Interaction):
+        amount = self.children[0].value
+        return amount
+
+#test uniwersalnego modalu
+class UniversalModal(discord.ui.Modal):
+    def __init__(self, title: str, input_fields: list, future: asyncio.Future):
+        super().__init__(title=title)
+
+        self.future = future
+        self.input_fields = input_fields
+        for field in input_fields:
+            discord.ui.InputText(label=field['label'], placeholder=field.get('placeholder', ''))
+
+
+    async def callback(self, interaction: discord.Interaction):
+        responses = {field['label']: self.children[i].value for i, field in enumerate(self.input_fields)}
+        self.future.set_result(responses)
+
+#przykładowe użycie
+async def ask_info(ctx):
+    input_fields = [
+        {"label": "Name", "placeholder": "Enter your name"},
+        {"label": "Age", "placeholder": "Enter your age"},
+        {"label": "Email", "placeholder": "Enter your email"}
+    ]
+
+    future = asyncio.Future()
+    modal = UniversalModal(title="User Information", input_fields=input_fields, future=future)
+    await ctx.send_modal(modal)
+
+    responses = await future
+    response_message = "\n".join([f"{label}: {value}" for label, value in responses.items()])
+    await ctx.send(f"You entered:\n{response_message}")

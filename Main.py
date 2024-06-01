@@ -1,4 +1,4 @@
-bot_version = "alfa v3.1.1"
+bot_version = "alfa v3.1.2"
 
 #custom packages
 from functions import database as db
@@ -34,7 +34,8 @@ async def on_ready():
     print('██║░░██║██████╔╝██║░╚═╝░██║███████╗██║░╚██╗██████╦╝╚█████╔╝░░░██║░░░')
     print('╚═╝░░╚═╝╚═════╝░╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░')
     print('𝗠𝗮𝗱𝗲 𝗯𝘆 𝗔𝘀𝗺𝗲𝗸𝗬𝗧')
-    print('𝗦𝗽𝗲𝗰𝗶𝗮𝗹 𝘁𝗵𝗮𝗻𝗸𝘀 𝘁𝗼 𝗻𝗮𝗱𝘄𝗲𝘆')
+    print('𝗦𝗽𝗲𝗰𝗶𝗮𝗹 𝘁𝗵𝗮𝗻𝗸𝘀 𝘁𝗼 𝗡𝗮𝗱𝘄𝗲𝘆 𝗮𝗻𝗱 𝗖𝗵𝗶𝗹𝗹𝗰𝗵𝗶𝗹𝗮')
+    await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"version: {bot_version}"))
 
     conn = mysql.connector.connect(**db.mysql_config)
     cursor = conn.cursor()
@@ -43,6 +44,16 @@ async def on_ready():
     for (channel_id,) in channels:
         channel = bot.get_channel(channel_id)
         if channel:
+            last_message = await channel.history(limit=1).flatten()
+            if last_message:
+                last_message = last_message[0]
+                if last_message.embeds:
+                    embed = last_message.embeds[0]
+                    if (embed.title == "Server Verification" and
+                            embed.description == "Hey, you can verify yourself here." and
+                            embed.fields[0].name == "To verify:" and
+                            embed.fields[0].value == "Use the /verify command."):
+                        continue
             await channel.purge()
             await channel.send(embed=em.CustomEmbed(
                 title="Server Verification",
@@ -60,6 +71,10 @@ async def work(ctx):
 @bot.slash_command(name='balance', description='Check your current balance.')
 async def balance(ctx):
     await eco.main.balance(ctx)
+
+@bot.slash_command(name='loan', description='Menage loans.')
+async def loan(ctx):
+    await eco.main.loan(ctx)
 
 
 @bot.slash_command(name='settings', description='Settings of the server.')
@@ -80,7 +95,7 @@ async def clear(ctx):
     await mod.main.clear(ctx, bot)
 
 
-@bot.slash_command(name='timeout', description="mutes/timeouts a member")
+@bot.slash_command(name='mute', description="mutes/timeouts a member")
 @has_permissions(moderate_members=True)
 async def timeout(ctx, member: Option(discord.Member, required=True), reason: Option(str, required=False),
                   days: Option(int, max_value=27, default=0, required=False),
@@ -107,6 +122,7 @@ async def version(ctx):
 
 
 @bot.slash_command(name='setverification', description='Verification setup')
+@has_permissions(administrator=True)
 async def setverification(ctx):
     await ctx.send_modal(md.SetVerificationModal(ctx))
 
@@ -130,11 +146,6 @@ async def modal_slash(ctx):
 async def create_embed(ctx):
     view = em.EmbedBuilder(ctx)
     await ctx.respond("Let's create an embed!", view=view, ephemeral=True)
-
-
-@bot.slash_command(name="destruction", description="ni")
-async def destruction(ctx):
-    await mod.main.destruction(ctx)
 
 
 db.initialize_database()

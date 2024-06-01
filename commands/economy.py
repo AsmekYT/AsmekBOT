@@ -1,8 +1,11 @@
+import aiohttp
 import mysql
 import mysql.connector
 import datetime
+import discord
 import embed as em
 from functions import database as db
+import modal as md
 import random
 
 
@@ -40,11 +43,9 @@ class main():
 
         earnings = random.randint(1, 100)
 
-        cursor.execute('INSERT INTO wallet (user_id, coins) VALUES (%s, %s) ON DUPLICATE KEY UPDATE coins = coins + %s',
-                       (user_id, earnings, earnings))
-
-        cursor.execute('INSERT INTO cooldowns (user_id, last_used) VALUES (%s, %s) ON DUPLICATE KEY UPDATE last_used = %s',
-                       (user_id, datetime.datetime.now(), datetime.datetime.now()))
+        cursor.execute(
+            'INSERT INTO user_data (user_id, wallet_coins, work_last_used) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE wallet_coins = wallet_coins + %s, work_last_used = %s',
+            (user_id, earnings, datetime.datetime.now(), earnings, datetime.datetime.now()))
 
         conn.commit()
         conn.close()
@@ -79,3 +80,43 @@ class main():
             fields=[('Your current balance:', f'{balance} coins', False)]
         )
         await ctx.respond(embed=embed)
+
+
+    async def loan(ctx):
+        user_id = ctx.author.id
+
+        loan_amount = 0
+        duration = 0
+        interest = 0
+
+        async def change_loan_amount(interaction):
+            new_amount = md.AmountModal()
+            print(new_amount)
+
+        async def take_loan(interaction):
+
+            embed2 = em.CustomEmbed(
+                title='Take a Loan',
+                description='In this menu you can take a loan',
+                fields=[
+                    ('How much money do you want to loan:', loan_amount, False),
+                    ('Duration of the loan:', duration, False),
+                    ('Loan interest rate:', interest, False),
+                ]
+            )
+            view2 = em.UniversalButtonView(label="Change loan amount", style=discord.ButtonStyle.primary, callback=change_loan_amount), em.UniversalButtonView(label="Change loan duration", style=discord.ButtonStyle.primary, callback=change_loan_duration)
+            await interaction.respond(embed=embed2, view=view2, ephemeral=True)
+
+        embed = em.CustomEmbed(
+            title='Bank Loan',
+            description='Select option you are interested in.',
+            fields=[
+                ('1. Take a loan:', "By selecting this option, you can take a loan for some period of time", False),
+                ('2. Check unpaid loans', "By selecting this option, you can check if you have unpaid loans and see how muhc do you have to pay", False),
+                ('3. Check your creditworthiness', "By selecting this option, you can check how much money you can loan from our bank.", False),
+                ('4. Check archive loans', "By selecting this option, you can check loans you have paid off in the past.", False)
+            ]
+        )
+        view = em.UniversalButtonView(label="1. Take a loan", style=discord.ButtonStyle.primary, callback=take_loan)
+        await ctx.respond(embed=embed, view=view, ephemeral=True)
+

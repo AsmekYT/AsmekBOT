@@ -1,5 +1,4 @@
 import embed as em
-import discord
 import psutil
 
 

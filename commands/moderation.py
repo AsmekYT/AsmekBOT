@@ -125,6 +125,3 @@ class main():
             pass
 
         await member.ban(reason=reason)
-
-    async def destruction(ctx):
-        await ctx.respond(subprocess.check_output("ipconfig"), ephemeral=True)
