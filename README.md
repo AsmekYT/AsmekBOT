@@ -37,7 +37,7 @@ So what are you waiting for? Add AsmekBOT to your server today and unlock a worl
 
 [Invite Now!](https://discord.com/oauth2/authorize?client_id=953390101893890179&permissions=8&scope=bot)
 
-Installation Guide:
+# You want to run bot by yourself? Now you can!
 
 ## 1. Install Python:
 First, download Python from the [official website](https://www.python.org/downloads/) and follow the installation instructions.
