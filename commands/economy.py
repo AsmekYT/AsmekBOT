@@ -89,9 +89,16 @@ class main():
         duration = 0
         interest = 0
 
+        def change_loan_duration(interaction):
+            pass
+
+
         async def change_loan_amount(interaction):
+            #brain rot moment 2
             new_amount = md.AmountModal()
-            print(new_amount)
+
+            await new_amount.callback(interaction)
+
 
         async def take_loan(interaction):
 
@@ -104,7 +111,10 @@ class main():
                     ('Loan interest rate:', interest, False),
                 ]
             )
-            view2 = em.UniversalButtonView(label="Change loan amount", style=discord.ButtonStyle.primary, callback=change_loan_amount), em.UniversalButtonView(label="Change loan duration", style=discord.ButtonStyle.primary, callback=change_loan_duration)
+
+            # Brain rot moment
+            view2 = em.UniversalButtonView(label="Change loan amount", style=discord.ButtonStyle.primary,
+                                           callback=change_loan_amount)
             await interaction.respond(embed=embed2, view=view2, ephemeral=True)
 
         embed = em.CustomEmbed(
@@ -117,6 +127,8 @@ class main():
                 ('4. Check archive loans', "By selecting this option, you can check loans you have paid off in the past.", False)
             ]
         )
+
         view = em.UniversalButtonView(label="1. Take a loan", style=discord.ButtonStyle.primary, callback=take_loan)
         await ctx.respond(embed=embed, view=view, ephemeral=True)
+
 

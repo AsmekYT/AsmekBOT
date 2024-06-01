@@ -136,15 +136,17 @@ class AddFieldModal(discord.ui.Modal):
 
 class AmountModal(discord.ui.Modal):
     def __init__(self):
-        super().__init__(title="How much money do you want to loan?")
 
-        discord.ui.InputText(label="Loan amount:", placeholder="Enter the amount you want to loan")
+        super().__init__(title="xdddd")
+
+        xd = discord.ui.InputText(label="xdddd", placeholder="Enter the xdddd", custom_id="xdddd")
+        self.add_item(xd)
 
     async def callback(self, interaction: discord.Interaction):
         amount = self.children[0].value
         return amount
 
-#test uniwersalnego modalu
+#test uniwersalnego modala
 class UniversalModal(discord.ui.Modal):
     def __init__(self, title: str, input_fields: list, future: asyncio.Future):
         super().__init__(title=title)

@@ -34,7 +34,7 @@ async def on_ready():
     print('██║░░██║██████╔╝██║░╚═╝░██║███████╗██║░╚██╗██████╦╝╚█████╔╝░░░██║░░░')
     print('╚═╝░░╚═╝╚═════╝░╚═╝░░░░░╚═╝╚══════╝╚═╝░░╚═╝╚═════╝░░╚════╝░░░░╚═╝░░░')
     print('𝗠𝗮𝗱𝗲 𝗯𝘆 𝗔𝘀𝗺𝗲𝗸𝗬𝗧')
-    print('𝗦𝗽𝗲𝗰𝗶𝗮𝗹 𝘁𝗵𝗮𝗻𝗸𝘀 𝘁𝗼 𝗡𝗮𝗱𝘄𝗲𝘆 𝗮𝗻𝗱 𝗖𝗵𝗶𝗹𝗹𝗰𝗵𝗶𝗹𝗮')
+    print('𝗦𝗽𝗲𝗰𝗶𝗮𝗹 𝘁𝗵𝗮𝗻𝗸𝘀 𝘁𝗼 𝗡𝗮𝗱𝘄𝗲𝘆 𝗮𝗻𝗱 𝗦𝘇𝘆𝗺𝘀𝘂𝗻')
     await bot.change_presence(status=discord.Status.online, activity=discord.Activity(type=discord.ActivityType.watching, name=f"version: {bot_version}"))
 
     conn = mysql.connector.connect(**db.mysql_config)

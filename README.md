@@ -15,10 +15,11 @@ Looking to enhance your Discord experience? Meet AsmekBOT, the all-in-one app de
 🔒 Security: Advanced anti-raid features to keep your server safe and sound.
 
 
-### Bot commands (v3.1.0):
+### Bot commands (v3.1.2):
 
 - work
-- bal
+- loan
+- balance
 - embed
 - ping
 - version
@@ -26,6 +27,7 @@ Looking to enhance your Discord experience? Meet AsmekBOT, the all-in-one app de
 - verify
 - tempban
 - clear
+- mute
 - settings
 
 # Why Choose AsmekBOT?
