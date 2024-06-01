@@ -107,6 +107,7 @@ async def version(ctx):
 
 
 @bot.slash_command(name='setverification', description='Verification setup')
+@has_permissions(administrator=True)
 async def setverification(ctx):
     await ctx.send_modal(md.SetVerificationModal(ctx))
 
