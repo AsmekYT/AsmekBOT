@@ -1,127 +1,194 @@
-import os
-
 import embed as em
 import discord
 from discord import Option
-from datetime import timedelta
-import subprocess
+from datetime import timedelta, datetime, timezone
+import logging
 
+log = logging.getLogger(__name__)
 
-class main():
-    async def clear(ctx, message_count: int):
-        if ctx.channel.type == discord.ChannelType.private:
-            await ctx.respond("You cannot use this command in a private message.")
-            return
+async def clear(ctx: discord.ApplicationContext, amount: Option(int, "Number of messages to clear", required=True)):
+    if ctx.channel.type == discord.ChannelType.private:
+        await ctx.respond("You cannot use this command in a private message.", ephemeral=True)
+        return
 
-        if message_count <= 0:
-            await ctx.respond("Please provide a message count greater than 0.")
-            return
+    if amount <= 0:
+        await ctx.respond("Please provide a message count greater than 0.", ephemeral=True)
+        return
 
-        author = ctx.guild.get_member(ctx.author.id)
+    if not ctx.app_permissions.manage_messages:
+         await ctx.respond("I don't have permission to manage messages in this channel.", ephemeral=True)
+         return
 
-        if not author.guild_permissions.manage_messages:
-            embed = em.CustomEmbed(
-                title="Permission missing",
-                description="You don't have enough permission to use this command"
-            )
-            await ctx.respond(embed=embed, ephemeral=True)
-            return
+    if not ctx.author.guild_permissions.manage_messages:
+         await ctx.respond("You don't have permission to use this command.", ephemeral=True)
+         return
 
-        await ctx.channel.purge(limit=message_count)
+    try:
+        deleted_messages = await ctx.channel.purge(limit=amount)
+        confirmation_message = f"Successfully cleared {len(deleted_messages)} messages."
 
         embed = em.CustomEmbed(
             title="Message Clearance",
-            description="",
-            fields=[("Cleared the following number of messages: ", str(message_count), False)]
+            description=confirmation_message,
+            color=discord.Color.green()
         )
-        await ctx.respond(embed=embed, ephemeral=True)
+        await ctx.respond(embed=embed, ephemeral=True, delete_after=10)
+    except discord.Forbidden:
+        log.warning(f"Missing permissions to clear messages in channel {ctx.channel.id} (guild {ctx.guild.id})")
+        await ctx.respond("I don't have the required permissions to delete messages here.", ephemeral=True)
+    except discord.HTTPException as e:
+        log.error(f"Failed to clear messages in {ctx.channel.id}: {e}")
+        await ctx.respond(f"An error occurred while clearing messages: {e}", ephemeral=True)
 
-    async def timeout(ctx, member: Option(discord.Member, required=True), reason: Option(str, required=False),
-                      days: Option(int, max_value=27, default=0, required=False),
-                      hours: Option(int, default=0, required=False), minutes: Option(int, default=0, required=False),
-                      seconds: Option(int, default=0,
-                                      required=False)):  # setting each value with a default value of 0 reduces a lot of the code
-        if member.id == ctx.author.id:
-            await ctx.respond("You can't timeout yourself!")
-            return
-        if member.guild_permissions.moderate_members:
-            await ctx.respond("You can't do this, this person is a moderator!")
-            return
-        duration = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
-        if reason == None:
-            await member.timeout_for(duration)
-            try:
-                await member.create_dm()
-                embed1 = em.CustomEmbed(
-                    title=f"You got muted by {ctx.author.name}",
-                    description="",
-                    fields=[("Reason:", "Moderator did not specify the reason.", False),
-                            ("For:", f"{days} days, {hours} hours, {minutes}, minutes, {seconds} seconds", False)],
-                )
-                await member.dm_channel.send(embed=embed1)
-            except:
-                pass
-            embed2 = em.CustomEmbed(
-                title=f"You muted {member.name}",
-                description="",
-                fields=[("Reason:", "You did not specify the reason.", False),
-                        ("For:", f"{days} days, {hours} hours, {minutes}, minutes, {seconds} seconds", False)],
-            )
-            await ctx.respond(embed=embed2, ephemeral=True)
-        else:
-            await member.timeout_for(duration, reason=reason)
-            try:
-                await member.create_dm()
-                embed2 = em.CustomEmbed(
-                    title=f"You got muted by {ctx.author.name}",
-                    description="",
-                    fields=[("Reason:", reason, False),
-                            ("For:", f"{days} days, {hours} hours, {minutes}, minutes, {seconds} seconds", False)],
-                )
-                await member.dm_channel.send(embed=embed2)
-            except:
-                pass
-            embed1 = em.CustomEmbed(
-                title=f"You muted {member.name}",
-                description="",
-                fields=[("Reason:", reason, False),
-                        ("For:", f"{days} days, {hours} hours, {minutes}, minutes, {seconds} seconds", False)],
-            )
-            await ctx.respond(embed=embed1, ephemeral=True)
-    async def tempban(ctx, member: discord.Member, reason="The administrator did not provide a reason"):
-        if ctx.channel.type == discord.ChannelType.private:
-            await ctx.respond("You cannot use this command in a private message.")
-            return
 
-        if not ctx.channel.permissions_for(ctx.guild.me).ban_members:
-            await ctx.author.send("I don't have permission to ban a user on this channel.")
-            return
+async def timeout(ctx: discord.ApplicationContext, member: Option(discord.Member, required=True), reason: Option(str, required=False),
+                    days: Option(int, max_value=27, default=0, required=False),
+                    hours: Option(int, default=0, required=False), minutes: Option(int, default=0, required=False),
+                    seconds: Option(int, default=0, required=False)):
+    if not ctx.app_permissions.moderate_members:
+        await ctx.respond("I don't have permission to timeout members.", ephemeral=True)
+        return
 
-        if not ctx.channel.permissions_for(ctx.author).ban_members:
-            await ctx.respond("You do not have permission to use this command.")
-            return
+    if member.id == ctx.author.id:
+        await ctx.respond("You can't timeout yourself!", ephemeral=True)
+        return
+    if member.top_role >= ctx.author.top_role and ctx.author.id != ctx.guild.owner_id:
+         await ctx.respond("You can't timeout someone with an equal or higher role than you.", ephemeral=True)
+         return
+    if member.top_role >= ctx.guild.me.top_role:
+         await ctx.respond("I can't timeout someone with an equal or higher role than me.", ephemeral=True)
+         return
+    if member.is_timed_out():
+        await ctx.respond(f"{member.mention} is already timed out.", ephemeral=True)
+        return
 
-        if member == ctx.author or member == ctx.guild.owner or member.top_role >= ctx.author.top_role:
-            await ctx.respond("You cannot ban this user.")
-            return
+    duration = timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+    max_duration = timedelta(days=28)
+    if duration <= timedelta(seconds=0):
+        await ctx.respond("Please specify a duration greater than 0 seconds.", ephemeral=True)
+        return
+    if duration > max_duration:
+         await ctx.respond("Timeout duration cannot exceed 28 days.", ephemeral=True)
+         duration = max_duration
 
-        embed = em.CustomEmbed(
-            title="Tempban",
-            description="The tempban command was used",
-            fields=[("Banned:", str(member), True), ("For:", reason, False)]
-        )
-        await ctx.respond(embed=embed)
+    final_reason = reason if reason else f"Action by {ctx.author.name}#{ctx.author.discriminator}"
 
-        embed2 = em.CustomEmbed(
-            title="You have been temporarily banned!!!",
-            description="You have been banned by the admin",
-            fields=[("Banned:", str(member), True), ("For:", reason, False)]
-        )
+    timeout_end_time = discord.utils.utcnow() + duration
+    duration_formatted = f"until {discord.utils.format_dt(timeout_end_time, style='F')} ({discord.utils.format_dt(timeout_end_time, style='R')})"
 
+    dm_sent = False
+    if member.bot:
+        pass
+    else:
         try:
-            await member.create_dm()
-            await member.dm_channel.send(embed=embed2)
-        except:
-            pass
+            dm_embed = em.CustomEmbed(
+                title=f"You have been timed out in {ctx.guild.name}",
+                color=discord.Color.orange(),
+                fields=[
+                    ("Duration:", duration_formatted, False),
+                    ("Reason:", final_reason if reason else "No reason provided.", False),
+                ]
+            )
+            await member.send(embed=dm_embed)
+            dm_sent = True
+        except discord.Forbidden:
+            log.warning(f"Could not DM user {member.id} about timeout (Forbidden).")
+        except discord.HTTPException as e:
+            log.warning(f"Could not DM user {member.id} about timeout (HTTPException: {e}).")
 
-        await member.ban(reason=reason)
+    try:
+        await member.timeout(duration, reason=final_reason)
+
+        confirm_embed = em.CustomEmbed(
+            title="Member Timed Out",
+            color=discord.Color.green(),
+            fields=[
+                ("Member:", member.mention, True),
+                ("Duration:", duration_formatted, True),
+                ("Reason:", final_reason if reason else "No reason provided.", False),
+                ("DM Sent:", "Yes" if dm_sent else "No (DMs disabled or error)", False)
+            ]
+        )
+        await ctx.respond(embed=confirm_embed, ephemeral=True)
+
+    except discord.Forbidden:
+        log.error(f"Missing permissions to timeout member {member.id} in guild {ctx.guild.id}")
+        await ctx.respond("I don't have the required permissions to timeout this member.", ephemeral=True)
+    except discord.HTTPException as e:
+        log.error(f"Failed to timeout member {member.id} in guild {ctx.guild.id}: {e}")
+        await ctx.respond(f"An error occurred while trying to timeout the member: {e}", ephemeral=True)
+
+
+async def tempban(ctx: discord.ApplicationContext, member: Option(discord.Member, required=True),
+                  duration_days: Option(int, "Duration of ban in days (0 for permanent)", default=0),
+                  reason: Option(str, "Reason for the ban", required=False)):
+
+    if ctx.channel.type == discord.ChannelType.private:
+        await ctx.respond("You cannot use this command in a private message.", ephemeral=True)
+        return
+
+    if not ctx.app_permissions.ban_members:
+        await ctx.respond("I don't have permission to ban members.", ephemeral=True)
+        return
+
+    if not ctx.author.guild_permissions.ban_members:
+        await ctx.respond("You do not have permission to use this command.", ephemeral=True)
+        return
+
+    if member.id == ctx.author.id:
+        await ctx.respond("You cannot ban yourself.", ephemeral=True)
+        return
+    if member.id == ctx.guild.owner_id:
+         await ctx.respond("You cannot ban the server owner.", ephemeral=True)
+         return
+    if member.top_role >= ctx.author.top_role and ctx.author.id != ctx.guild.owner_id:
+        await ctx.respond("You cannot ban someone with an equal or higher role than you.", ephemeral=True)
+        return
+    if member.top_role >= ctx.guild.me.top_role:
+        await ctx.respond("I cannot ban someone with an equal or higher role than me.", ephemeral=True)
+        return
+
+    final_reason = reason if reason else f"Action by {ctx.author.name}"
+    duration_text = f"{duration_days} days" if duration_days > 0 else "Permanent"
+
+    dm_sent = False
+    if not member.bot:
+        try:
+            embed_dm = em.CustomEmbed(
+                title=f"You have been banned from {ctx.guild.name}!",
+                description=f"You were banned by {ctx.author.mention}.",
+                color=discord.Color.red(),
+                fields=[("Duration:", duration_text, True),
+                        ("Reason:", final_reason if reason else "No reason provided.", False)]
+            )
+            await member.send(embed=embed_dm)
+            dm_sent = True
+        except discord.Forbidden:
+            log.warning(f"Could not DM user {member.id} about ban (Forbidden).")
+        except discord.HTTPException as e:
+            log.warning(f"Could not DM user {member.id} about ban (HTTPException: {e}).")
+
+    try:
+        await member.ban(reason=final_reason, delete_message_days=0)
+
+        embed_confirm = em.CustomEmbed(
+            title="Member Banned",
+            color=discord.Color.dark_red(),
+            fields=[
+                ("Member:", f"{member.name}#{member.discriminator} ({member.id})", False),
+                ("Duration:", duration_text, True),
+                ("Reason:", final_reason if reason else "No reason provided.", False),
+                ("DM Sent:", "Yes" if dm_sent else "No (DMs disabled or error)", False)
+            ]
+        )
+        await ctx.respond(embed=embed_confirm)
+
+        if duration_days > 0:
+            await ctx.send(f"Note: Automatic unban after {duration_days} days is not yet implemented.", ephemeral=True)
+
+    except discord.Forbidden:
+        log.error(f"Missing permissions to ban member {member.id} in guild {ctx.guild.id}")
+        await ctx.respond("I don't have the required permissions to ban this member.", ephemeral=True)
+    except discord.HTTPException as e:
+        log.error(f"Failed to ban member {member.id} in guild {ctx.guild.id}: {e}")
+        await ctx.respond(f"An error occurred while trying to ban the member: {e}", ephemeral=True)
