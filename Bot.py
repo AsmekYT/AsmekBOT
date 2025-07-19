@@ -1,5 +1,5 @@
 #wersja bota
-bot_version = "3.2.7"
+bot_version = "2.7.1"
 #główne komendy inportujące nakładkę discorda do pliku wykonawczego pythona
 import discord
 from discord.ext import commands
